@@ -1,6 +1,7 @@
 import { Organization } from '@domain/entities/organization/organization';
 import { OrganizationInMemoryRepository } from '@infra/database/inMemory/organization.repository';
 import { makeOrganization } from '@test/factories/organization.factory';
+import { OrganizationNotFound } from '@useCases/errors/OrganizationNotFound';
 import { UpdateOrganization } from '.';
 
 describe('Update Organization', () => {
@@ -36,6 +37,6 @@ describe('Update Organization', () => {
                 logo: 'new logo',
                 isActive: false,
             }),
-        ).rejects.toThrowError('Organization not found');
+        ).rejects.toThrow(OrganizationNotFound);
     });
 });

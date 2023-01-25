@@ -1,4 +1,6 @@
 import { OrganizationRepository } from '@domain/repositories/organization.repository';
+import { Injectable } from '@nestjs/common';
+import { OrganizationNotFound } from '@useCases/errors/OrganizationNotFound';
 
 type UpdateOrganizationDTO = {
     id: string;
@@ -6,7 +8,7 @@ type UpdateOrganizationDTO = {
     logo?: string;
     isActive?: boolean;
 };
-
+@Injectable()
 export class UpdateOrganization {
     constructor(private organizationRepository: OrganizationRepository) {}
 
@@ -18,7 +20,7 @@ export class UpdateOrganization {
             });
             return this.organizationRepository.update(organization);
         } else {
-            throw new Error('Organization not found');
+            throw new OrganizationNotFound();
         }
     }
 }

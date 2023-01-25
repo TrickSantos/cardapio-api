@@ -1,6 +1,8 @@
 import { Organization } from '@domain/entities/organization/organization';
 import { OrganizationRepository } from '@domain/repositories/organization.repository';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class ListAllOrganizations {
     constructor(private organizationRepository: OrganizationRepository) {}
 

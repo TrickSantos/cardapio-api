@@ -1,11 +1,13 @@
 import { Organization } from '@domain/entities/organization/organization';
 import { OrganizationRepository } from '@domain/repositories/organization.repository';
+import { Injectable } from '@nestjs/common';
 
 type CreateOrganizationDTO = {
     name: string;
     logo: string;
 };
 
+@Injectable()
 export class CreateOrganization {
     constructor(private organizationRepository: OrganizationRepository) {}
 

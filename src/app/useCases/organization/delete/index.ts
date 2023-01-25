@@ -1,5 +1,8 @@
 import { OrganizationRepository } from '@domain/repositories/organization.repository';
+import { Injectable } from '@nestjs/common';
+import { OrganizationNotFound } from '@useCases/errors/OrganizationNotFound';
 
+@Injectable()
 export class DeleteOrganization {
     constructor(private organizationRepository: OrganizationRepository) {}
 
@@ -8,7 +11,7 @@ export class DeleteOrganization {
         if (organization) {
             return this.organizationRepository.delete(organization);
         } else {
-            throw new Error('Organization not found');
+            throw new OrganizationNotFound();
         }
     }
 }

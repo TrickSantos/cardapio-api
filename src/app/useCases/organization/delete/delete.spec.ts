@@ -1,5 +1,6 @@
 import { OrganizationInMemoryRepository } from '@infra/database/inMemory/organization.repository';
 import { makeOrganization } from '@test/factories/organization.factory';
+import { OrganizationNotFound } from '@useCases/errors/OrganizationNotFound';
 import { DeleteOrganization } from '.';
 
 describe('Delete Organization', () => {
@@ -16,8 +17,8 @@ describe('Delete Organization', () => {
     it('should throw an error if organization not found', async () => {
         const repository = new OrganizationInMemoryRepository();
         const useCase = new DeleteOrganization(repository);
-        await expect(useCase.execute('invalid-id')).rejects.toThrowError(
-            'Organization not found',
+        await expect(useCase.execute('invalid-id')).rejects.toThrow(
+            OrganizationNotFound,
         );
     });
 });

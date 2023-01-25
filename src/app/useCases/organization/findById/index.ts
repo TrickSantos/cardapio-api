@@ -1,6 +1,9 @@
 import { Organization } from '@domain/entities/organization/organization';
 import { OrganizationRepository } from '@domain/repositories/organization.repository';
+import { Injectable } from '@nestjs/common';
+import { OrganizationNotFound } from '@useCases/errors/OrganizationNotFound';
 
+@Injectable()
 export class FindOrganizationById {
     constructor(private organizationRepository: OrganizationRepository) {}
 
@@ -9,7 +12,7 @@ export class FindOrganizationById {
         if (response) {
             return response;
         } else {
-            throw new Error('Organization not found');
+            throw new OrganizationNotFound();
         }
     }
 }

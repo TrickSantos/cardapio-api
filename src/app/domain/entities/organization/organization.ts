@@ -59,4 +59,15 @@ export class Organization implements OrganizationProps {
             updatedAt: new Date(),
         };
     }
+
+    public toJSON() {
+        return {
+            id: this.id,
+            name: this.name,
+            logo: this.logo,
+            isActive: this.isActive,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
+        };
+    }
 }

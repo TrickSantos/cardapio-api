@@ -1,6 +1,7 @@
 import { Organization } from '@domain/entities/organization/organization';
 import { OrganizationInMemoryRepository } from '@infra/database/inMemory/organization.repository';
 import { makeOrganization } from '@test/factories/organization.factory';
+import { OrganizationNotFound } from '@useCases/errors/OrganizationNotFound';
 import { FindOrganizationById } from '.';
 
 describe('FindUnique', () => {
@@ -26,8 +27,8 @@ describe('FindUnique', () => {
     });
 
     it('should throw an error if organization not found', async () => {
-        await expect(findUnique.execute('invalid-id')).rejects.toThrowError(
-            'Organization not found',
+        await expect(findUnique.execute('invalid-id')).rejects.toThrow(
+            OrganizationNotFound,
         );
     });
 });

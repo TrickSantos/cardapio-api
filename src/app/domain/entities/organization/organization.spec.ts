@@ -26,4 +26,22 @@ describe('Organization', () => {
         expect(organization.logo).toBe('https://logo2');
         expect(organization.isActive).toBe(false);
     });
+
+    it('should be able to return a organization data like a JSON', () => {
+        const organization = new Organization({
+            name: 'Organization 1',
+            logo: 'https://logo',
+            isActive: true,
+        });
+
+        const organizationJSON = organization.toJSON();
+        expect(organizationJSON).toEqual({
+            id: organization.id,
+            name: 'Organization 1',
+            logo: 'https://logo',
+            isActive: true,
+            createdAt: organization.createdAt,
+            updatedAt: organization.updatedAt,
+        });
+    });
 });
