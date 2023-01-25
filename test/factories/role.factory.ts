@@ -1,11 +1,12 @@
 import { Role, RoleProps } from '@domain/entities/user/role/role';
+import { faker } from '@faker-js/faker';
 
 type Override = Partial<RoleProps>;
 
 export function makeRole(props: Override = {}): Role {
     return new Role({
-        name: 'name',
-        description: 'description',
+        name: faker.name.jobTitle(),
+        description: faker.lorem.sentence(),
         ...props,
     });
 }
