@@ -17,14 +17,15 @@ export class OrganizationInMemoryRepository implements OrganizationRepository {
         }
     }
 
-    async delete(organization: Organization): Promise<void> {
-        this.organizations = this.organizations.filter(
-            (org) => org.id !== organization.id,
-        );
+    async delete(id: string): Promise<void> {
+        const current = this.organizations.find((org) => org.id === id);
+        if (current) {
+            current.update({ isActive: false });
+        }
     }
 
     async findAll(): Promise<Organization[]> {
-        return this.organizations;
+        return this.organizations.filter((org) => org.isActive);
     }
 
     async findById(id: string): Promise<Organization> {

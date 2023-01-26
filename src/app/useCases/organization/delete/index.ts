@@ -9,7 +9,7 @@ export class DeleteOrganization {
     async execute(id: string): Promise<void> {
         const organization = await this.organizationRepository.findById(id);
         if (organization) {
-            return this.organizationRepository.delete(organization);
+            return this.organizationRepository.delete(organization.id);
         } else {
             throw new OrganizationNotFound();
         }
