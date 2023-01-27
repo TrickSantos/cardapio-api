@@ -59,6 +59,10 @@ export class User {
         return this.props.email;
     }
 
+    get password(): string {
+        return this.props.password;
+    }
+
     get permissions(): Permission[] {
         return this.props.permissions;
     }
@@ -91,7 +95,18 @@ export class User {
         };
     }
 
-    public toPrimitives(): UserProps {
-        return this.props;
+    public toJSON() {
+        return {
+            id: this.id,
+            organizationId: this.organizationId,
+            username: this.username,
+            email: this.email,
+            permissions: this.permissions,
+            roles: this.roles,
+            contact: this.contact,
+            isActive: this.isActive,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
+        };
     }
 }

@@ -1,5 +1,5 @@
-import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { ZodValidationPipe } from '@anatine/zod-nestjs';
 import {
     FastifyAdapter,
     NestFastifyApplication,
@@ -12,7 +12,7 @@ async function bootstrap() {
         new FastifyAdapter(),
     );
 
-    app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalPipes(new ZodValidationPipe());
 
     await app.listen(3000, '0.0.0.0');
 }

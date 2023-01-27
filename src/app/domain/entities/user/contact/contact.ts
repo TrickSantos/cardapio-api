@@ -62,7 +62,15 @@ export class Contact {
         };
     }
 
-    public toPrimitives(): ContactProps {
-        return this.props;
+    public toJSON() {
+        return {
+            id: this.id,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            email: this.email,
+            phone: this.phone,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
+        };
     }
 }
