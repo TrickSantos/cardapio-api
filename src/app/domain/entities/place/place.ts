@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { Replace } from 'src/helpers/replace';
 
-type PlaceProps = {
+export type PlaceProps = {
     organizationId: string;
     name: string;
     address: string;
@@ -84,6 +84,23 @@ export class Place {
             ...this.props,
             ...props,
             updatedAt: new Date(),
+        };
+    }
+
+    public toJSON() {
+        return {
+            id: this.id,
+            organizationId: this.organizationId,
+            name: this.name,
+            address: this.address,
+            city: this.city,
+            state: this.state,
+            zip: this.zip,
+            phone: this.phone,
+            website: this.website,
+            isActive: this.isActive,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
         };
     }
 }

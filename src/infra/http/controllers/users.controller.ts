@@ -65,10 +65,7 @@ export class UsersController {
     async update(@Param('id') id: string, @Body() body: UpdateUserDto) {
         await this.updateUser.execute({
             id,
-            username: body.username,
-            email: body.email,
-            password: body.password,
-            isActive: body.isActive,
+            ...body,
         });
     }
 

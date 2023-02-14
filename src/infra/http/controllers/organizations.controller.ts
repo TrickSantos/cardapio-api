@@ -49,8 +49,7 @@ export class OrganizationsController {
     async update(@Param('id') id: string, @Body() body: UpdateOrganizationDTO) {
         await this.updateOrganization.execute({
             id,
-            name: body.name,
-            logo: body.logo,
+            ...body,
         });
     }
 
