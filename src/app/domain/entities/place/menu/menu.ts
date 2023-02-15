@@ -64,7 +64,7 @@ export class Menu {
         return this.props.updatedAt;
     }
 
-    public toPrimitives(): MenuProps {
+    public toJSON(): MenuProps {
         return {
             placeId: this.placeId,
             name: this.name,

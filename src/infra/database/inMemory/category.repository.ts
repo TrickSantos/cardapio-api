@@ -1,0 +1,36 @@
+import { Category } from '@domain/entities/place/category/category';
+import { CategoryRepository } from '@domain/repositories/category.repository';
+
+export class InMemoryCategoryRepository extends CategoryRepository {
+    private category: Category[] = [];
+
+    async create(category: Category): Promise<void> {
+        this.category.push(category);
+    }
+
+    async update(category: Category): Promise<void> {
+        const current = this.category.find((u) => u.id === category.id);
+        if (current) {
+            current.update(category);
+        }
+    }
+
+    async findById(id: string): Promise<Category> {
+        return this.category.find((Category) => Category.id === id);
+    }
+
+    async findAll(): Promise<Category[]> {
+        return this.category.filter((Category) => Category.isActive);
+    }
+
+    async delete(id: string): Promise<void> {
+        const current = this.category.find((Category) => Category.id === id);
+        if (current) {
+            current.update({ isActive: false });
+        }
+    }
+
+    reset() {
+        this.category = [];
+    }
+}

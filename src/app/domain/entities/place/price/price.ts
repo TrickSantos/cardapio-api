@@ -54,7 +54,7 @@ export class Price {
         return this.props.updatedAt;
     }
 
-    public toPrimitives(): PriceProps {
+    public toJSON(): PriceProps {
         return {
             placeId: this.placeId,
             productId: this.productId,

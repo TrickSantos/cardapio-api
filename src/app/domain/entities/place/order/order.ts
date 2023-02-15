@@ -9,9 +9,11 @@ export type OrderProps = {
     placeId: string;
     orderNumber: number;
     table: Table;
+    tableId: string;
     items: Product[];
     combos: Combo[];
     customer: User;
+    customerId: string;
     isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -45,6 +47,10 @@ export class Order {
         return this.props.orderNumber;
     }
 
+    get tableId(): string {
+        return this.props.tableId;
+    }
+
     get table(): Table {
         return this.props.table;
     }
@@ -57,6 +63,10 @@ export class Order {
         return this.props.combos;
     }
 
+    get customerId(): string {
+        return this.props.customerId;
+    }
+
     get customer(): User {
         return this.props.customer;
     }
@@ -67,5 +77,34 @@ export class Order {
 
     get createdAt(): Date {
         return this.props.createdAt;
+    }
+
+    get updatedAt(): Date {
+        return this.props.updatedAt;
+    }
+
+    public update(props: Partial<OrderProps>): void {
+        this.props = {
+            ...this.props,
+            ...props,
+            updatedAt: new Date(),
+        };
+    }
+
+    public toJSON() {
+        return {
+            id: this.id,
+            placeId: this.placeId,
+            orderNumber: this.orderNumber,
+            tableId: this.tableId,
+            table: this.table,
+            items: this.items,
+            combos: this.combos,
+            customer: this.customer,
+            customerId: this.customerId,
+            isActive: this.isActive,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
+        };
     }
 }

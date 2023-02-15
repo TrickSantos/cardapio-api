@@ -83,7 +83,7 @@ export class Product {
         return this.props.updatedAt;
     }
 
-    public toPrimitives(): ProductProps {
+    public toJSON(): ProductProps {
         return {
             placeId: this.placeId,
             name: this.name,

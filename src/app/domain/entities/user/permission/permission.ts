@@ -52,7 +52,7 @@ export class Permission {
         };
     }
 
-    public toPrimitives(): PermissionProps {
+    public toJSON(): PermissionProps {
         return this.props;
     }
 }

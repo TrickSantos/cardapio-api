@@ -49,7 +49,7 @@ export class Table {
         return this.props.updatedAt;
     }
 
-    public toPrimitives(): TableProps {
+    public toJSON(): TableProps {
         return {
             placeId: this.placeId,
             name: this.name,

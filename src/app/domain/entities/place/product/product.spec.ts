@@ -95,7 +95,7 @@ describe('Product', () => {
             description: 'test',
             isActive: true,
         });
-        const primitives = product.toPrimitives();
+        const primitives = product.toJSON();
 
         expect(primitives).toBeDefined();
         expect(primitives.name).toBe('test');

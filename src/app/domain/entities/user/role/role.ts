@@ -52,7 +52,7 @@ export class Role {
         };
     }
 
-    public toPrimitives(): RoleProps {
+    public toJSON(): RoleProps {
         return this.props;
     }
 }

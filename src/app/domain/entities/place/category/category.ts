@@ -49,8 +49,17 @@ export class Category {
         return this.props.updatedAt;
     }
 
-    public toPrimitives(): CategoryProps {
+    update(props: Partial<CategoryProps>): void {
+        this.props = {
+            ...this.props,
+            ...props,
+            updatedAt: new Date(),
+        };
+    }
+
+    public toJSON() {
         return {
+            id: this.id,
             placeId: this.placeId,
             name: this.name,
             isActive: this.isActive,
