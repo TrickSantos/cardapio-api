@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { OrganizationNotFound } from '@useCases/errors/OrganizationNotFound';
 
 @Injectable()
-export class DeleteOrganization {
+export class DeleteOrganizationUseCase {
     constructor(private organizationRepository: OrganizationRepository) {}
 
     async execute(id: string): Promise<void> {

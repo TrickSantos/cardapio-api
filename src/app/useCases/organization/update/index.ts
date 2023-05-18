@@ -9,18 +9,17 @@ type UpdateOrganizationDTO = {
     isActive?: boolean;
 };
 @Injectable()
-export class UpdateOrganization {
+export class UpdateOrganizationUseCase {
     constructor(private organizationRepository: OrganizationRepository) {}
 
     async execute(org: UpdateOrganizationDTO): Promise<void> {
         const organization = await this.organizationRepository.findById(org.id);
-        if (organization) {
-            organization.update({
-                ...org,
-            });
-            return this.organizationRepository.update(organization);
-        } else {
-            throw new OrganizationNotFound();
-        }
+
+        if (!organization) throw new OrganizationNotFound();
+
+        organization.update({
+            ...org,
+        });
+        return this.organizationRepository.update(organization);
     }
 }

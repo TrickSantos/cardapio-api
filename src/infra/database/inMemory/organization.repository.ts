@@ -28,10 +28,16 @@ export class OrganizationInMemoryRepository implements OrganizationRepository {
         return this.organizations.filter((org) => org.isActive);
     }
 
-    async findById(id: string): Promise<Organization> {
-        return this.organizations.find(
+    async findById(id: string) {
+        const organization = this.organizations.find(
             (organization) => organization.id === id,
         );
+
+        if (organization) {
+            return organization;
+        }
+
+        return null;
     }
 
     reset(): void {

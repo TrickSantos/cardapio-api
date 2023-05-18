@@ -1,3 +1,4 @@
+import { describe, afterEach, it, expect } from 'vitest';
 import { Place } from '@domain/entities/place/place';
 import { InMemoryPlaceRepository } from '@infra/database/inMemory/place.repository';
 import { makePlace } from '@test/factories/place.factory';

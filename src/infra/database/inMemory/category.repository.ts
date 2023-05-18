@@ -15,8 +15,12 @@ export class InMemoryCategoryRepository extends CategoryRepository {
         }
     }
 
-    async findById(id: string): Promise<Category> {
-        return this.category.find((Category) => Category.id === id);
+    async findById(id: string): Promise<Category | null> {
+        const category = this.category.find((Category) => Category.id === id);
+        if (category) {
+            return category;
+        }
+        return null;
     }
 
     async findAll(): Promise<Category[]> {

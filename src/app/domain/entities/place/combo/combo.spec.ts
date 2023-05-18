@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { Price } from '../price/price';
 import { Product } from '../product/product';
 import { Combo } from './combo';

@@ -1,24 +1,15 @@
-import { Contact } from './contact';
+import { describe, it, expect } from 'vitest';
+import { makeContact } from '@test/factories/contact.factory';
 
 describe('Contact', () => {
     it('should create a contact', () => {
-        const contact = new Contact({
-            firstName: 'first-name',
-            lastName: 'last-name',
-            email: 'email',
-            phone: 'phone',
-        });
+        const contact = makeContact();
 
         expect(contact).toBeDefined();
     });
 
     it('should update a contact', () => {
-        const contact = new Contact({
-            firstName: 'first-name',
-            lastName: 'last-name',
-            email: 'email',
-            phone: 'phone',
-        });
+        const contact = makeContact();
 
         contact.update({
             firstName: 'new-first-name',

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { Category } from './category';
 
 describe('Category', () => {

@@ -1,18 +1,9 @@
-import { Place } from './place';
+import { describe, it, expect } from 'vitest';
+import { makePlace } from '@test/factories/place.factory';
 
 describe('Place', () => {
     it('should create an instance', () => {
-        const place = new Place({
-            organizationId: 'test',
-            name: 'test',
-            address: 'test',
-            city: 'test',
-            state: 'test',
-            zip: 'test',
-            phone: 'test',
-            website: 'test',
-            isActive: true,
-        });
+        const place = makePlace();
 
         expect(place).toBeTruthy();
         expect(place.id).toBeDefined();

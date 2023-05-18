@@ -1,13 +1,14 @@
+import { describe, beforeEach, it, expect } from 'vitest';
 import { Organization } from '@domain/entities/organization/organization';
 import { OrganizationInMemoryRepository } from '@infra/database/inMemory/organization.repository';
 import { makeOrganization } from '@test/factories/organization.factory';
 import { OrganizationNotFound } from '@useCases/errors/OrganizationNotFound';
-import { UpdateOrganization } from '.';
+import { UpdateOrganizationUseCase } from '.';
 
 describe('Update Organization', () => {
     let organization: Organization;
     const repository = new OrganizationInMemoryRepository();
-    const useCase = new UpdateOrganization(repository);
+    const useCase = new UpdateOrganizationUseCase(repository);
 
     beforeEach(() => {
         organization = makeOrganization();
@@ -23,10 +24,10 @@ describe('Update Organization', () => {
         });
         const updatedOrg = await repository.findById(organization.id);
         expect(updatedOrg).toBeDefined();
-        expect(updatedOrg.id).toEqual(organization.id);
-        expect(updatedOrg.name).toEqual('new name');
-        expect(updatedOrg.logo).toEqual('new logo');
-        expect(updatedOrg.isActive).toEqual(false);
+        expect(updatedOrg?.id).toEqual(organization.id);
+        expect(updatedOrg?.name).toEqual('new name');
+        expect(updatedOrg?.logo).toEqual('new logo');
+        expect(updatedOrg?.isActive).toEqual(false);
     });
 
     it('should throw an error if organization not found', async () => {

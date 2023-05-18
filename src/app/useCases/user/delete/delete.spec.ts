@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { InMemoryUserRepository } from '@infra/database/inMemory/user.repository';
 import { makeUser } from '@test/factories/user.factory';
 import { UserNotFound } from '@useCases/errors/UserNotFound';

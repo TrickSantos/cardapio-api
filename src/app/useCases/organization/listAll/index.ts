@@ -3,7 +3,7 @@ import { OrganizationRepository } from '@domain/repositories/organization.reposi
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class ListAllOrganizations {
+export class ListAllOrganizationsUseCase {
     constructor(private organizationRepository: OrganizationRepository) {}
 
     async execute(): Promise<Organization[]> {

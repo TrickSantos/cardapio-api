@@ -1,3 +1,4 @@
+import { describe, afterEach, beforeEach, it, expect } from 'vitest';
 import { Category } from '@domain/entities/place/category/category';
 import { InMemoryCategoryRepository } from '@infra/database/inMemory/category.repository';
 import { makeCategory } from '@test/factories/category.factory';
@@ -31,7 +32,7 @@ describe('Update Category', () => {
 
     it('should throw an error if category not found', async () => {
         await expect(
-            useCase.execute({ id: 'invalid-id', ...makeCategory() }),
+            useCase.execute({ ...makeCategory(), id: 'invalid-id' }),
         ).rejects.toThrow(CategoryNotFound);
     });
 });

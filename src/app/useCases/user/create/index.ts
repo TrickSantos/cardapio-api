@@ -1,7 +1,7 @@
 import { UserRepository } from '@domain/repositories/user.repository';
 import { Injectable } from '@nestjs/common';
-import { User } from '@domain/entities/user/user';
-import { Contact } from '@domain/entities/user/contact/contact';
+import { makeUser } from '@test/factories/user.factory';
+import { makeContact } from '@test/factories/contact.factory';
 
 type CreateUserDTO = {
     organizationId: string;
@@ -20,19 +20,28 @@ type CreateUserDTO = {
 };
 
 @Injectable()
-export class CreateUser {
+export class CreateUserUseCase {
     constructor(private userRepository: UserRepository) {}
 
     async execute(data: CreateUserDTO): Promise<void> {
-        const user = new User({
+        const user = makeUser({
             organizationId: data.organizationId,
             username: data.username,
             email: data.email,
-            contact: new Contact(data.contact),
             isActive: true,
             permissions: [],
             roles: [],
             password: data.password,
+        });
+
+        user.update({
+            contact: makeContact({
+                firstName: data.contact.firstName,
+                lastName: data.contact.lastName,
+                email: data.contact.email,
+                phone: data.contact.phone,
+                userId: user.id,
+            }),
         });
 
         return this.userRepository.create(user);

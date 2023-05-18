@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { Replace } from 'src/helpers/replace';
 
 export type ContactProps = {
+    userId: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -28,6 +29,10 @@ export class Contact {
 
     get id(): string {
         return this._id;
+    }
+
+    get userId(): string {
+        return this.props.userId;
     }
 
     get firstName(): string {
@@ -65,6 +70,7 @@ export class Contact {
     public toJSON() {
         return {
             id: this.id,
+            userId: this.userId,
             firstName: this.firstName,
             lastName: this.lastName,
             email: this.email,

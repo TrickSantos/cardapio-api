@@ -1,3 +1,4 @@
+import { describe, afterEach, it, expect } from 'vitest';
 import { Category } from '@domain/entities/place/category/category';
 import { InMemoryCategoryRepository } from '@infra/database/inMemory/category.repository';
 import { makeCategory } from '@test/factories/category.factory';

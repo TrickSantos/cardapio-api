@@ -9,6 +9,7 @@ export function makeProduct(props: Override = {}): Product {
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
         isActive: true,
+        price: null,
         ...props,
     });
 }

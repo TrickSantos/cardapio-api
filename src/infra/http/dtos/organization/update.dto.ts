@@ -1,11 +1,6 @@
-import { IsOptional, IsString } from 'class-validator';
+import { createZodDto } from '@anatine/zod-nestjs';
+import { createOrganizationSchema } from './create.dto';
 
-export class UpdateOrganizationDTO {
-    @IsOptional()
-    @IsString()
-    name: string;
-
-    @IsOptional()
-    @IsString()
-    logo: string;
-}
+export class UpdateOrganizationDTO extends createZodDto(
+    createOrganizationSchema.partial(),
+) {}

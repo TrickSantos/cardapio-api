@@ -26,7 +26,6 @@ export class Product {
                 createdAt?: Date;
                 updatedAt?: Date;
                 categories?: Category[];
-                price?: Price;
                 priceHistory?: Price[];
             }
         >,
@@ -35,7 +34,6 @@ export class Product {
         this._id = id || randomUUID();
         this.props = {
             ...props,
-            price: props.price || null,
             priceHistory: props.priceHistory || [],
             categories: props.categories || [],
             createdAt: props.createdAt || new Date(),
@@ -83,8 +81,17 @@ export class Product {
         return this.props.updatedAt;
     }
 
-    public toJSON(): ProductProps {
+    public update(props: Partial<ProductProps>): void {
+        this.props = {
+            ...this.props,
+            ...props,
+            updatedAt: new Date(),
+        };
+    }
+
+    public toJSON() {
         return {
+            id: this.id,
             placeId: this.placeId,
             name: this.name,
             description: this.description,

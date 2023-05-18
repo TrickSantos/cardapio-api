@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { OrganizationNotFound } from '@useCases/errors/OrganizationNotFound';
 
 @Injectable()
-export class FindOrganizationById {
+export class FindOrganizationByIdUseCase {
     constructor(private organizationRepository: OrganizationRepository) {}
 
     async execute(id: string): Promise<Organization> {

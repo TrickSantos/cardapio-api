@@ -7,22 +7,22 @@ import {
     Post,
     Put,
 } from '@nestjs/common';
-import { CreateOrganization } from '@useCases/organization/create';
-import { DeleteOrganization } from '@useCases/organization/delete';
-import { FindOrganizationById } from '@useCases/organization/findById';
-import { ListAllOrganizations } from '@useCases/organization/listAll';
-import { UpdateOrganization } from '@useCases/organization/update';
+import { CreateOrganizationUseCase } from '@useCases/organization/create';
+import { DeleteOrganizationUseCase } from '@useCases/organization/delete';
+import { FindOrganizationByIdUseCase } from '@useCases/organization/findById';
+import { ListAllOrganizationsUseCase } from '@useCases/organization/listAll';
+import { UpdateOrganizationUseCase } from '@useCases/organization/update';
 import { CreateOrganizationDTO } from '../dtos/organization/create.dto';
 import { UpdateOrganizationDTO } from '../dtos/organization/update.dto';
 
 @Controller('organizations')
 export class OrganizationsController {
     constructor(
-        private createOrganization: CreateOrganization,
-        private listAllOrganizations: ListAllOrganizations,
-        private findByIdOrganization: FindOrganizationById,
-        private updateOrganization: UpdateOrganization,
-        private deleteOrganization: DeleteOrganization,
+        private createOrganization: CreateOrganizationUseCase,
+        private listAllOrganizations: ListAllOrganizationsUseCase,
+        private findByIdOrganization: FindOrganizationByIdUseCase,
+        private updateOrganization: UpdateOrganizationUseCase,
+        private deleteOrganization: DeleteOrganizationUseCase,
     ) {}
 
     @Get()

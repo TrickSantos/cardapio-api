@@ -5,7 +5,7 @@ export interface OrganizationProps {
     name: string;
     logo: string;
     isActive: boolean;
-    createdAt: Date | null;
+    createdAt: Date;
     updatedAt: Date;
 }
 
@@ -44,7 +44,7 @@ export class Organization implements OrganizationProps {
         return this.props.isActive;
     }
 
-    get createdAt(): Date | null {
+    get createdAt(): Date {
         return this.props.createdAt;
     }
 

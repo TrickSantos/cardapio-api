@@ -7,7 +7,7 @@ import {
     Post,
     Put,
 } from '@nestjs/common';
-import { CreateUser } from '@useCases/user/create';
+import { CreateUserUseCase } from '@useCases/user/create';
 import { DeleteUserUseCase } from '@useCases/user/delete';
 import { FindUserByIdUseCase } from '@useCases/user/findById';
 import { ListAllUsersUseCase } from '@useCases/user/listAll';
@@ -18,7 +18,7 @@ import { UpdateUserDto } from '../dtos/user/update.dto';
 @Controller('users')
 export class UsersController {
     constructor(
-        private createUser: CreateUser,
+        private createUser: CreateUserUseCase,
         private listAllUsers: ListAllUsersUseCase,
         private findUserById: FindUserByIdUseCase,
         private updateUser: UpdateUserUseCase,
@@ -31,7 +31,7 @@ export class UsersController {
         return users.map((user) => {
             return {
                 ...user.toJSON(),
-                contact: user.contact.toJSON(),
+                contact: user.contact?.toJSON(),
             };
         });
     }

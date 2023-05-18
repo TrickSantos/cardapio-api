@@ -16,13 +16,12 @@ export class UpdateUserUseCase {
 
     async execute(data: UpdateUserDTO) {
         const user = await this.userRepository.findById(data.id);
-        if (user) {
-            user.update({
-                ...data,
-            });
-            return this.userRepository.update(user);
-        } else {
-            throw new UserNotFound();
-        }
+
+        if (!user) throw new UserNotFound();
+
+        user.update({
+            ...data,
+        });
+        return this.userRepository.update(user);
     }
 }

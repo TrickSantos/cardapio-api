@@ -1,4 +1,4 @@
-import { Contact } from './contact/contact';
+import { describe, it, expect } from 'vitest';
 import { User } from './user';
 
 describe('User', () => {
@@ -7,12 +7,7 @@ describe('User', () => {
             organizationId: 'org-id',
             email: 'email',
             username: 'username',
-            contact: new Contact({
-                firstName: 'first-name',
-                lastName: 'last-name',
-                email: 'email',
-                phone: 'phone',
-            }),
+
             isActive: true,
             password: 'password',
         });
@@ -26,12 +21,6 @@ describe('User', () => {
             organizationId: 'org-id',
             email: 'email',
             username: 'username',
-            contact: new Contact({
-                firstName: 'first-name',
-                lastName: 'last-name',
-                email: 'email',
-                phone: 'phone',
-            }),
             isActive: true,
             password: 'password',
         });

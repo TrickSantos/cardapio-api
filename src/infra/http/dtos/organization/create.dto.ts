@@ -1,14 +1,13 @@
-import { IsString, IsUrl } from 'class-validator';
+import { createZodDto } from '@anatine/zod-nestjs';
+import { z } from 'zod';
 
-export class CreateOrganizationDTO {
-    @IsString({ message: 'Name must be a string' })
-    name: string;
+export const createOrganizationSchema = z.object({
+    name: z.string().nonempty('Name is required'),
+    logo: z.string().url({
+        message: 'Logo must be a valid URL',
+    }),
+});
 
-    @IsUrl(
-        {},
-        {
-            message: 'Logo must be a valid URL',
-        },
-    )
-    logo: string;
-}
+export class CreateOrganizationDTO extends createZodDto(
+    createOrganizationSchema,
+) {}

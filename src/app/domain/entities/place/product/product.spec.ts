@@ -1,26 +1,18 @@
+import { describe, it, expect } from 'vitest';
+import { makeProduct } from '@test/factories/product.factory';
 import { Category } from '../category/category';
 import { Price } from '../price/price';
-import { Product } from './product';
 
 describe('Product', () => {
     it('should create an instance', () => {
-        const product = new Product({
-            name: 'test',
-            placeId: 'test',
-            description: 'test',
-            isActive: true,
-        });
+        const product = makeProduct();
         expect(product).toBeTruthy();
         expect(product.id).toBeDefined();
         expect(product.createdAt).toBeDefined();
     });
 
     it('should create an instance with price', () => {
-        const product = new Product({
-            name: 'test',
-            placeId: 'test',
-            description: 'test',
-            isActive: true,
+        const product = makeProduct({
             price: new Price({
                 placeId: 'test',
                 productId: 'test',
@@ -35,17 +27,13 @@ describe('Product', () => {
     });
 
     it('should create an instance with price history', () => {
-        const product = new Product({
-            name: 'test',
-            placeId: 'test',
-            description: 'test',
-            isActive: true,
+        const product = makeProduct({
             priceHistory: [
                 new Price({
                     placeId: 'test',
                     productId: 'test',
                     value: 10,
-                    isActive: true,
+                    isActive: false,
                 }),
                 new Price({
                     placeId: 'test',
@@ -63,11 +51,7 @@ describe('Product', () => {
     });
 
     it('should create an instance with categories', () => {
-        const product = new Product({
-            name: 'test',
-            placeId: 'test',
-            description: 'test',
-            isActive: true,
+        const product = makeProduct({
             categories: [
                 new Category({
                     name: 'category 1',
@@ -89,7 +73,7 @@ describe('Product', () => {
     });
 
     it('should be able to return the primitive values', () => {
-        const product = new Product({
+        const product = makeProduct({
             name: 'test',
             placeId: 'test',
             description: 'test',

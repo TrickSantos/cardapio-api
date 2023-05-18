@@ -1,43 +1,29 @@
-import { DatabaseModule } from '@infra/database/database.module';
 import { Module } from '@nestjs/common';
-import { CreateOrganization } from '@useCases/organization/create';
-import { DeleteOrganization } from '@useCases/organization/delete';
-import { FindOrganizationById } from '@useCases/organization/findById';
-import { ListAllOrganizations } from '@useCases/organization/listAll';
-import { UpdateOrganization } from '@useCases/organization/update';
-import { CreatePlaceUseCase } from '@useCases/place/create';
-import { DeletePlaceUseCase } from '@useCases/place/delete';
-import { FindPlaceByIdUseCase } from '@useCases/place/findById';
-import { ListAllPlacesUseCase } from '@useCases/place/listAll';
-import { UpdatePlaceUseCase } from '@useCases/place/update';
-import { CreateUser } from '@useCases/user/create';
-import { DeleteUserUseCase } from '@useCases/user/delete';
-import { FindUserByIdUseCase } from '@useCases/user/findById';
-import { ListAllUsersUseCase } from '@useCases/user/listAll';
-import { UpdateUserUseCase } from '@useCases/user/update';
+import { CategoryUseCaseModule } from '@useCases/category/category.module';
+import { OrganizationUseCaseModule } from '@useCases/organization/organization.module';
+import { PlaceUseCaseModule } from '@useCases/place/place.module';
+import { ProductUseCaseModule } from '@useCases/product/product.module';
+import { UserUseCaseModule } from '@useCases/user/user.module';
+import { CategoryController } from './controllers/category.controller';
 import { OrganizationsController } from './controllers/organizations.controller';
 import { PlacesController } from './controllers/place.controller';
+import { ProductsController } from './controllers/product.controller';
 import { UsersController } from './controllers/users.controller';
 
 @Module({
-    imports: [DatabaseModule],
-    controllers: [OrganizationsController, UsersController, PlacesController],
-    providers: [
-        CreateOrganization,
-        ListAllOrganizations,
-        FindOrganizationById,
-        UpdateOrganization,
-        DeleteOrganization,
-        CreateUser,
-        ListAllUsersUseCase,
-        FindUserByIdUseCase,
-        UpdateUserUseCase,
-        DeleteUserUseCase,
-        CreatePlaceUseCase,
-        ListAllPlacesUseCase,
-        FindPlaceByIdUseCase,
-        UpdatePlaceUseCase,
-        DeletePlaceUseCase,
+    controllers: [
+        OrganizationsController,
+        UsersController,
+        PlacesController,
+        CategoryController,
+        ProductsController,
+    ],
+    imports: [
+        OrganizationUseCaseModule,
+        UserUseCaseModule,
+        PlaceUseCaseModule,
+        CategoryUseCaseModule,
+        ProductUseCaseModule,
     ],
 })
 export class HttpModule {}

@@ -15,8 +15,12 @@ export class InMemoryPlaceRepository extends PlaceRepository {
         }
     }
 
-    async findById(id: string): Promise<Place> {
-        return this.places.find((Place) => Place.id === id);
+    async findById(id: string): Promise<Place | null> {
+        const place = this.places.find((Place) => Place.id === id);
+        if (place) {
+            return place;
+        }
+        return null;
     }
 
     async findAll(): Promise<Place[]> {

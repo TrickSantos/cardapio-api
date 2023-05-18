@@ -12,7 +12,7 @@ export type UserProps = {
     isActive: boolean;
     permissions: Permission[];
     roles: Role[];
-    contact: Contact;
+    contact?: Contact;
     createdAt: Date;
     updatedAt: Date;
 };
@@ -29,6 +29,7 @@ export class User {
                 updatedAt?: Date;
                 permissions?: Permission[];
                 roles?: Role[];
+                contact?: Contact;
             }
         >,
         id?: string,
@@ -71,7 +72,7 @@ export class User {
         return this.props.roles;
     }
 
-    get contact(): Contact {
+    get contact(): Contact | undefined {
         return this.props.contact;
     }
 
@@ -101,9 +102,11 @@ export class User {
             organizationId: this.organizationId,
             username: this.username,
             email: this.email,
-            permissions: this.permissions,
-            roles: this.roles,
-            contact: this.contact,
+            permissions: this.permissions.map((permission) =>
+                permission.toJSON(),
+            ),
+            roles: this.roles.map((role) => role.toJSON()),
+            contact: this.contact?.toJSON(),
             isActive: this.isActive,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,

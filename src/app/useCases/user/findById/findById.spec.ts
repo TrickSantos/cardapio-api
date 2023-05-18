@@ -1,3 +1,4 @@
+import { describe, afterEach, beforeEach, it, expect } from 'vitest';
 import { User } from '@domain/entities/user/user';
 import { InMemoryUserRepository } from '@infra/database/inMemory/user.repository';
 import { makeUser } from '@test/factories/user.factory';

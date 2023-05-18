@@ -4,6 +4,6 @@ export abstract class ComboRepository {
     abstract create(combo: Combo): Promise<void>;
     abstract update(combo: Combo): Promise<void>;
     abstract delete(combo: Combo): Promise<void>;
-    abstract findById(id: string): Promise<Combo>;
+    abstract findById(id: string): Promise<Combo | null>;
     abstract findAll(): Promise<Combo[]>;
 }

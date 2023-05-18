@@ -1,3 +1,4 @@
+import { describe, afterEach, beforeEach, it, expect } from 'vitest';
 import { User } from '@domain/entities/user/user';
 import { InMemoryUserRepository } from '@infra/database/inMemory/user.repository';
 import { makeUser } from '@test/factories/user.factory';
@@ -33,7 +34,7 @@ describe('Update User', () => {
 
     it('should throw an error if user not found', async () => {
         await expect(
-            useCase.execute({ id: 'invalid-id', ...makeUser() }),
+            useCase.execute({ ...makeUser(), id: 'invalid-id' }),
         ).rejects.toThrow(UserNotFound);
     });
 });
