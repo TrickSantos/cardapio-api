@@ -1,5 +1,5 @@
 import { Product, ProductProps } from '@domain/entities/place/product/product';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/pt_BR';
 
 type Override = Partial<ProductProps>;
 

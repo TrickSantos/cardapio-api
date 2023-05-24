@@ -2,7 +2,7 @@ import {
     Permission,
     PermissionProps,
 } from '@domain/entities/user/permission/permission';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/pt_BR';
 
 type Override = Partial<PermissionProps>;
 

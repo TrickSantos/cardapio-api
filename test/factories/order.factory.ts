@@ -1,5 +1,5 @@
 import { Order, OrderProps } from '@domain/entities/place/order/order';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/pt_BR';
 import { makeTable } from './table.factory';
 import { makeUser } from './user.factory';
 

@@ -1,5 +1,5 @@
 import { Combo, ComboProps } from '@domain/entities/place/combo/combo';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/pt_BR';
 
 type Override = Partial<ComboProps>;
 

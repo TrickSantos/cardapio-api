@@ -1,5 +1,5 @@
 import { Menu, MenuProps } from '@domain/entities/place/menu/menu';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/pt_BR';
 
 type Override = Partial<MenuProps>;
 

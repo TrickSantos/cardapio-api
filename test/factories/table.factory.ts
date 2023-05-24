@@ -1,5 +1,5 @@
 import { Table, TableProps } from '@domain/entities/place/table/table';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/pt_BR';
 
 type Override = Partial<TableProps>;
 

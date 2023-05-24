@@ -54,6 +54,14 @@ export class Price {
         return this.props.updatedAt;
     }
 
+    public update(props: Partial<PriceProps>): void {
+        this.props = {
+            ...this.props,
+            ...props,
+            updatedAt: new Date(),
+        };
+    }
+
     public toJSON(): PriceProps {
         return {
             placeId: this.placeId,

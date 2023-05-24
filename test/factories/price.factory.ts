@@ -1,5 +1,5 @@
 import { Price, PriceProps } from '@domain/entities/place/price/price';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/pt_BR';
 
 type Override = Partial<PriceProps>;
 

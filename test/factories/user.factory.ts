@@ -1,5 +1,5 @@
 import { User, UserProps } from '@domain/entities/user/user';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/pt_BR';
 import { makeContact } from './contact.factory';
 
 type Override = Partial<UserProps>;

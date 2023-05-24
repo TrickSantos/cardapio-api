@@ -1,5 +1,5 @@
 import { Place, PlaceProps } from '@domain/entities/place/place';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/pt_BR';
 
 type Override = Partial<PlaceProps>;
 

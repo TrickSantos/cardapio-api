@@ -1,5 +1,5 @@
 import { Contact, ContactProps } from '@domain/entities/user/contact/contact';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/locale/pt_BR';
 
 type Override = Partial<ContactProps>;
 
