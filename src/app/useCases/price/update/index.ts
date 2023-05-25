@@ -4,7 +4,6 @@ import { PriceNotFound } from '@useCases/errors/PriceNotFound';
 
 type UpdatePriceDTO = {
     id: string;
-    placeId?: string;
     productId?: string;
     value?: number;
     isActive?: boolean;

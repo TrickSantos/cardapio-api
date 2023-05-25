@@ -1,7 +1,7 @@
 import { Category } from '@domain/entities/place/category/category';
 import { CategoryRepository } from '@domain/repositories/category.repository';
 
-export class InMemoryCategoryRepository extends CategoryRepository {
+export class InMemoryCategoryRepository implements CategoryRepository {
     private category: Category[] = [];
 
     async create(category: Category): Promise<void> {

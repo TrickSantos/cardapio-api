@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { makePrice } from '@test/factories/price.factory';
 
 type CreatePriceDTO = {
-    placeId: string;
     productId: string;
     value: number;
 };
@@ -14,7 +13,6 @@ export class CreatePriceUseCase {
 
     async execute(data: CreatePriceDTO): Promise<void> {
         const price = makePrice({
-            placeId: data.placeId,
             productId: data.productId,
             value: data.value,
         });

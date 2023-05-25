@@ -1,7 +1,7 @@
 import { Place } from '@domain/entities/place/place';
 import { PlaceRepository } from '@domain/repositories/place.repository';
 
-export class InMemoryPlaceRepository extends PlaceRepository {
+export class InMemoryPlaceRepository implements PlaceRepository {
     private places: Place[] = [];
 
     async create(Place: Place): Promise<void> {

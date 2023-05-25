@@ -2,7 +2,6 @@ import { Replace } from '@helpers/replace';
 import { randomUUID } from 'node:crypto';
 
 export type PriceProps = {
-    placeId: string;
     productId: string;
     value: number;
     isActive: boolean;
@@ -28,10 +27,6 @@ export class Price {
 
     get id(): string {
         return this._id;
-    }
-
-    get placeId(): string {
-        return this.props.placeId;
     }
 
     get productId(): string {
@@ -62,9 +57,9 @@ export class Price {
         };
     }
 
-    public toJSON(): PriceProps {
+    public toJSON() {
         return {
-            placeId: this.placeId,
+            id: this.id,
             productId: this.productId,
             value: this.value,
             isActive: this.isActive,

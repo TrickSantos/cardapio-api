@@ -5,7 +5,6 @@ type Override = Partial<PriceProps>;
 
 export function makePrice(props: Override = {}): Price {
     return new Price({
-        placeId: faker.datatype.uuid(),
         productId: faker.datatype.uuid(),
         value: faker.datatype.number(),
         isActive: true,

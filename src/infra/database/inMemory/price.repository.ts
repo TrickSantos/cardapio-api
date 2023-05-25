@@ -1,7 +1,7 @@
 import { Price } from '@domain/entities/place/price/price';
 import { PriceRepository } from '@domain/repositories/price.repository';
 
-export class InMemoryPriceRepository extends PriceRepository {
+export class InMemoryPriceRepository implements PriceRepository {
     private price: Price[] = [];
 
     async create(price: Price): Promise<void> {

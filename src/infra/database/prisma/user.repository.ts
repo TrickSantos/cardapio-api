@@ -1,7 +1,7 @@
 import { User } from '@domain/entities/user/user';
 import { UserRepository } from '@domain/repositories/user.repository';
 
-export class InMemoryUserRepository implements UserRepository {
+export class InMemoryUserRepository extends UserRepository {
     private users: User[] = [];
 
     async create(user: User): Promise<void> {
