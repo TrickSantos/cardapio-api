@@ -1,6 +1,6 @@
+import { Place } from '@domain/entities/place/place';
 import { PlaceRepository } from '@domain/repositories/place.repository';
 import { Injectable } from '@nestjs/common';
-import { makePlace } from '@test/factories/place.factory';
 
 type CreatePlaceDTO = {
     organizationId: string;
@@ -18,7 +18,7 @@ export class CreatePlaceUseCase {
     constructor(private placeRepository: PlaceRepository) {}
 
     async execute(data: CreatePlaceDTO): Promise<void> {
-        const place = makePlace({
+        const place = new Place({
             organizationId: data.organizationId,
             name: data.name,
             address: data.address,

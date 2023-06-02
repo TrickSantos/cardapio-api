@@ -1,15 +1,15 @@
 import { Replace } from '@helpers/replace';
 import { randomUUID } from 'node:crypto';
+import { Section } from '../section/section';
 
 export type MenuProps = {
     placeId: string;
     name: string;
     description: string;
-    sequence: string[];
-    hasPromotion: boolean;
     isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
+    sections: Section[];
 };
 
 export class Menu {
@@ -17,12 +17,16 @@ export class Menu {
     private props: MenuProps;
 
     constructor(
-        props: Replace<MenuProps, { createdAt?: Date; updatedAt?: Date }>,
+        props: Replace<
+            MenuProps,
+            { createdAt?: Date; updatedAt?: Date; sections?: Section[] }
+        >,
         id?: string,
     ) {
         this._id = id || randomUUID();
         this.props = {
             ...props,
+            sections: props.sections || [],
             createdAt: props.createdAt || new Date(),
             updatedAt: props.updatedAt || new Date(),
         };
@@ -44,12 +48,8 @@ export class Menu {
         return this.props.description;
     }
 
-    get sequence(): string[] {
-        return this.props.sequence;
-    }
-
-    get hasPromotion(): boolean {
-        return this.props.hasPromotion;
+    get sections(): Section[] {
+        return this.props.sections;
     }
 
     get isActive(): boolean {
@@ -64,14 +64,22 @@ export class Menu {
         return this.props.updatedAt;
     }
 
-    public toJSON(): MenuProps {
+    update(props: Partial<MenuProps>): void {
+        this.props = {
+            ...this.props,
+            ...props,
+            updatedAt: new Date(),
+        };
+    }
+
+    public toJSON() {
         return {
+            id: this.id,
             placeId: this.placeId,
             name: this.name,
             description: this.description,
-            sequence: this.sequence,
-            hasPromotion: this.hasPromotion,
             isActive: this.isActive,
+            sections: this.sections.map((section) => section.toJSON()),
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
         };

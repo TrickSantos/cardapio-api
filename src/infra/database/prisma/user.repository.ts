@@ -1,36 +1,95 @@
 import { User } from '@domain/entities/user/user';
 import { UserRepository } from '@domain/repositories/user.repository';
+import { PrismaService } from './prisma.service';
 
-export class InMemoryUserRepository extends UserRepository {
-    private users: User[] = [];
+export class PrismaUserRepository implements UserRepository {
+    constructor(private prisma: PrismaService) {}
 
     async create(user: User): Promise<void> {
-        this.users.push(user);
+        await this.prisma.user.create({
+            data: {
+                id: user.id,
+                organizationId: user.organizationId,
+                username: user.username,
+                email: user.email,
+                password: user.password,
+                isActive: user.isActive,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+            },
+        });
     }
 
     async update(user: User): Promise<void> {
-        const current = this.users.find((u) => u.id === user.id);
-        if (current) {
-            current.update(user);
-        }
-    }
-
-    async findById(id: string): Promise<User | null> {
-        return this.users.find((user) => user.id === id) || null;
-    }
-
-    async findAll(): Promise<User[]> {
-        return this.users.filter((user) => user.isActive);
+        await this.prisma.user.update({
+            where: {
+                id: user.id,
+            },
+            data: {
+                organizationId: user.organizationId,
+                username: user.username,
+                email: user.email,
+                password: user.password,
+                isActive: user.isActive,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+            },
+        });
     }
 
     async delete(id: string): Promise<void> {
-        const current = this.users.find((user) => user.id === id);
-        if (current) {
-            current.update({ isActive: false });
-        }
+        await this.prisma.user.update({
+            where: {
+                id,
+            },
+            data: {
+                isActive: false,
+            },
+        });
     }
 
-    reset() {
-        this.users = [];
+    async findById(id: string): Promise<User | null> {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        if (user) {
+            return new User(
+                {
+                    organizationId: user.organizationId,
+                    username: user.username,
+                    email: user.email,
+                    password: user.password,
+                    isActive: user.isActive,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt,
+                },
+                user.id,
+            );
+        }
+
+        return null;
+    }
+
+    async findAll(): Promise<User[]> {
+        const users = await this.prisma.user.findMany();
+
+        return users.map(
+            (user) =>
+                new User(
+                    {
+                        organizationId: user.organizationId,
+                        username: user.username,
+                        email: user.email,
+                        password: user.password,
+                        isActive: user.isActive,
+                        createdAt: user.createdAt,
+                        updatedAt: user.updatedAt,
+                    },
+                    user.id,
+                ),
+        );
     }
 }

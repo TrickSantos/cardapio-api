@@ -1,18 +1,15 @@
 import { Category } from '@domain/entities/place/category/category';
 import { CategoryRepository } from '@domain/repositories/category.repository';
+import { CategoryMapper } from '@mappers/category.mapper';
 import { PrismaService } from './prisma.service';
 
 export class PrismaCategoryRepository implements CategoryRepository {
     constructor(private prisma: PrismaService) {}
 
     async create(category: Category): Promise<void> {
+        const data = CategoryMapper.toPersistence(category);
         await this.prisma.category.create({
-            data: {
-                id: category.id,
-                name: category.name,
-                isActive: category.isActive,
-                placeId: category.placeId,
-            },
+            data,
         });
     }
 
@@ -41,34 +38,13 @@ export class PrismaCategoryRepository implements CategoryRepository {
         });
 
         if (category) {
-            return new Category(
-                {
-                    name: category.name,
-                    isActive: category.isActive,
-                    placeId: category.placeId,
-                    createdAt: category.createdAt,
-                    updatedAt: category.updatedAt,
-                },
-                id,
-            );
+            return CategoryMapper.toDomain(category);
         }
         return null;
     }
 
     async findAll(): Promise<Category[]> {
         const categories = await this.prisma.category.findMany();
-        return categories.map(
-            (category) =>
-                new Category(
-                    {
-                        name: category.name,
-                        isActive: category.isActive,
-                        placeId: category.placeId,
-                        createdAt: category.createdAt,
-                        updatedAt: category.updatedAt,
-                    },
-                    category.id,
-                ),
-        );
+        return categories.map(CategoryMapper.toDomain);
     }
 }

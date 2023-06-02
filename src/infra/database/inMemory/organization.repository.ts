@@ -1,7 +1,7 @@
 import { Organization } from '@domain/entities/organization/organization';
 import { OrganizationRepository } from '@domain/repositories/organization.repository';
 
-export class OrganizationInMemoryRepository implements OrganizationRepository {
+export class InMemoryOrganizationRepository implements OrganizationRepository {
     private organizations: Organization[] = [];
 
     async create(organization: Organization): Promise<void> {

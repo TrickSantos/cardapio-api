@@ -1,18 +1,15 @@
 import { Price } from '@domain/entities/place/price/price';
 import { PriceRepository } from '@domain/repositories/price.repository';
+import { PriceMapper } from '@mappers/price.mapper';
 import { PrismaService } from './prisma.service';
 
 export class PrismaPriceRepository implements PriceRepository {
     constructor(private prisma: PrismaService) {}
 
     async create(price: Price): Promise<void> {
+        const data = PriceMapper.toPersistence(price);
         await this.prisma.price.create({
-            data: {
-                id: price.id,
-                value: price.value,
-                isActive: price.isActive,
-                productId: price.productId,
-            },
+            data,
         });
     }
 
@@ -40,34 +37,13 @@ export class PrismaPriceRepository implements PriceRepository {
             where: { id },
         });
         if (price) {
-            return new Price(
-                {
-                    value: price.value,
-                    isActive: price.isActive,
-                    productId: price.productId,
-                    createdAt: price.createdAt,
-                    updatedAt: price.updatedAt,
-                },
-                id,
-            );
+            return PriceMapper.toDomain(price);
         }
         return null;
     }
 
     async findAll(): Promise<Price[]> {
         const prices = await this.prisma.price.findMany();
-        return prices.map(
-            (price) =>
-                new Price(
-                    {
-                        value: price.value,
-                        isActive: price.isActive,
-                        productId: price.productId,
-                        createdAt: price.createdAt,
-                        updatedAt: price.updatedAt,
-                    },
-                    price.id,
-                ),
-        );
+        return prices.map(PriceMapper.toDomain);
     }
 }

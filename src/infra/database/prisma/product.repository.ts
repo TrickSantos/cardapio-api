@@ -1,20 +1,15 @@
 import { Product } from '@domain/entities/place/product/product';
-import { Price } from '@domain/entities/place/price/price';
 import { ProductRepository } from '@domain/repositories/product.repository';
 import { PrismaService } from './prisma.service';
+import { ProductMapper } from '@mappers/product.mapper';
 
 export class PrismaProductRepository implements ProductRepository {
     constructor(private prisma: PrismaService) {}
 
     async create(product: Product): Promise<void> {
+        const data = ProductMapper.toPersistence(product);
         await this.prisma.product.create({
-            data: {
-                id: product.id,
-                name: product.name,
-                description: product.description,
-                isActive: product.isActive,
-                placeId: product.placeId,
-            },
+            data,
         });
     }
 
@@ -47,51 +42,30 @@ export class PrismaProductRepository implements ProductRepository {
         });
 
         if (product) {
-            return new Product(
-                {
-                    name: product.name,
-                    description: product.description,
-                    isActive: product.isActive,
-                    placeId: product.placeId,
-                    price: new Price(
-                        {
-                            ...product.price.filter((p) => p.isActive)[0],
-                        },
-                        product.price.filter((p) => p.isActive)[0].id,
-                    ),
-                    createdAt: product.createdAt,
-                    updatedAt: product.updatedAt,
-                },
-                id,
-            );
+            return ProductMapper.toDomain(product);
         }
         return null;
     }
+
     async findAll(): Promise<Product[]> {
         const products = await this.prisma.product.findMany({
             include: {
                 price: true,
             },
         });
-        return products.map(
-            (product) =>
-                new Product(
-                    {
-                        name: product.name,
-                        description: product.description,
-                        isActive: product.isActive,
-                        placeId: product.placeId,
-                        price: new Price(
-                            {
-                                ...product.price.filter((p) => p.isActive)[0],
-                            },
-                            product.price.filter((p) => p.isActive)[0].id,
-                        ),
-                        createdAt: product.createdAt,
-                        updatedAt: product.updatedAt,
+        return products.map(ProductMapper.toDomain);
+    }
+
+    async addCategory(productId: string, categoryId: string): Promise<void> {
+        await this.prisma.product.update({
+            where: { id: productId },
+            data: {
+                categories: {
+                    connect: {
+                        id: categoryId,
                     },
-                    product.id,
-                ),
-        );
+                },
+            },
+        });
     }
 }

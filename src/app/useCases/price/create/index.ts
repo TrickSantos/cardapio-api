@@ -1,6 +1,6 @@
+import { Price } from '@domain/entities/place/price/price';
 import { PriceRepository } from '@domain/repositories/price.repository';
 import { Injectable } from '@nestjs/common';
-import { makePrice } from '@test/factories/price.factory';
 
 type CreatePriceDTO = {
     productId: string;
@@ -12,9 +12,10 @@ export class CreatePriceUseCase {
     constructor(private priceRepository: PriceRepository) {}
 
     async execute(data: CreatePriceDTO): Promise<void> {
-        const price = makePrice({
+        const price = new Price({
             productId: data.productId,
             value: data.value,
+            isActive: true,
         });
 
         return this.priceRepository.create(price);

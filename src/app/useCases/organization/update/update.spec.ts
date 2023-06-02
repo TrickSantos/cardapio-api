@@ -1,13 +1,13 @@
 import { describe, beforeEach, it, expect } from 'vitest';
 import { Organization } from '@domain/entities/organization/organization';
-import { OrganizationInMemoryRepository } from '@infra/database/inMemory/organization.repository';
+import { InMemoryOrganizationRepository } from '@infra/database/inMemory/organization.repository';
 import { makeOrganization } from '@test/factories/organization.factory';
 import { OrganizationNotFound } from '@useCases/errors/OrganizationNotFound';
 import { UpdateOrganizationUseCase } from '.';
 
 describe('Update Organization', () => {
     let organization: Organization;
-    const repository = new OrganizationInMemoryRepository();
+    const repository = new InMemoryOrganizationRepository();
     const useCase = new UpdateOrganizationUseCase(repository);
 
     beforeEach(() => {

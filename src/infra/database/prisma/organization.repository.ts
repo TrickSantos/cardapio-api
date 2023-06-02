@@ -1,18 +1,15 @@
 import { Organization } from '@domain/entities/organization/organization';
 import { OrganizationRepository } from '@domain/repositories/organization.repository';
+import { OrganizationMapper } from '@mappers/organization.mapper';
 import { PrismaService } from './prisma.service';
 
 export class PrismaOrganizationRepository implements OrganizationRepository {
     constructor(private prisma: PrismaService) {}
 
     async create(organization: Organization): Promise<void> {
+        const data = OrganizationMapper.toPersistence(organization);
         await this.prisma.organization.create({
-            data: {
-                id: organization.id,
-                name: organization.name,
-                logo: organization.logo,
-                isActive: organization.isActive,
-            },
+            data,
         });
     }
 
@@ -41,30 +38,13 @@ export class PrismaOrganizationRepository implements OrganizationRepository {
             where: { id },
         });
         if (organization) {
-            return new Organization(
-                {
-                    name: organization.name,
-                    logo: organization.logo,
-                    isActive: organization.isActive,
-                },
-                id,
-            );
+            return OrganizationMapper.toDomain(organization);
         }
         return null;
     }
 
     async findAll(): Promise<Organization[]> {
         const organizations = await this.prisma.organization.findMany();
-        return organizations.map(
-            (organization) =>
-                new Organization(
-                    {
-                        name: organization.name,
-                        logo: organization.logo,
-                        isActive: organization.isActive,
-                    },
-                    organization.id,
-                ),
-        );
+        return organizations.map(OrganizationMapper.toDomain);
     }
 }

@@ -1,6 +1,6 @@
+import { Category } from '@domain/entities/place/category/category';
 import { CategoryRepository } from '@domain/repositories/category.repository';
 import { Injectable } from '@nestjs/common';
-import { makeCategory } from '@test/factories/category.factory';
 
 type CreateCategoryDTO = {
     placeId: string;
@@ -12,7 +12,7 @@ export class CreateCategoryUseCase {
     constructor(private placeRepository: CategoryRepository) {}
 
     async execute(data: CreateCategoryDTO): Promise<void> {
-        const category = makeCategory({
+        const category = new Category({
             placeId: data.placeId,
             name: data.name,
             isActive: true,

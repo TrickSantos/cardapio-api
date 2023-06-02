@@ -8,8 +8,6 @@ export function makeMenu(props: Override = {}): Menu {
         placeId: faker.datatype.uuid(),
         name: faker.commerce.department(),
         description: faker.commerce.productDescription(),
-        hasPromotion: faker.datatype.boolean(),
-        sequence: [],
         isActive: true,
         ...props,
     });

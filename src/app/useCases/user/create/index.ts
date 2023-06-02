@@ -1,7 +1,7 @@
 import { UserRepository } from '@domain/repositories/user.repository';
 import { Injectable } from '@nestjs/common';
-import { makeUser } from '@test/factories/user.factory';
-import { makeContact } from '@test/factories/contact.factory';
+import { User } from '@domain/entities/user/user';
+import { Contact } from '@domain/entities/user/contact/contact';
 
 type CreateUserDTO = {
     organizationId: string;
@@ -24,7 +24,7 @@ export class CreateUserUseCase {
     constructor(private userRepository: UserRepository) {}
 
     async execute(data: CreateUserDTO): Promise<void> {
-        const user = makeUser({
+        const user = new User({
             organizationId: data.organizationId,
             username: data.username,
             email: data.email,
@@ -35,7 +35,7 @@ export class CreateUserUseCase {
         });
 
         user.update({
-            contact: makeContact({
+            contact: new Contact({
                 firstName: data.contact.firstName,
                 lastName: data.contact.lastName,
                 email: data.contact.email,

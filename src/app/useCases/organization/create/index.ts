@@ -1,6 +1,6 @@
+import { Organization } from '@domain/entities/organization/organization';
 import { OrganizationRepository } from '@domain/repositories/organization.repository';
 import { Injectable } from '@nestjs/common';
-import { makeOrganization } from '@test/factories/organization.factory';
 
 type CreateOrganizationDTO = {
     name: string;
@@ -12,7 +12,7 @@ export class CreateOrganizationUseCase {
     constructor(private organizationRepository: OrganizationRepository) {}
 
     async execute(data: CreateOrganizationDTO): Promise<void> {
-        const organization = makeOrganization({
+        const organization = new Organization({
             name: data.name,
             logo: data.logo,
             isActive: true,
