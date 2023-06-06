@@ -2,6 +2,7 @@ import { CategoryRepository } from '@domain/repositories/category.repository';
 import { MenuRepository } from '@domain/repositories/menu.repository';
 import { OrganizationRepository } from '@domain/repositories/organization.repository';
 import { PlaceRepository } from '@domain/repositories/place.repository';
+import { PriceRepository } from '@domain/repositories/price.repository';
 import { ProductRepository } from '@domain/repositories/product.repository';
 import { SectionRepository } from '@domain/repositories/section.repository';
 import { UserRepository } from '@domain/repositories/user.repository';
@@ -10,6 +11,7 @@ import { InMemoryCategoryRepository } from './inMemory/category.repository';
 import { InMemoryMenuRepository } from './inMemory/menu.repository';
 import { InMemoryOrganizationRepository } from './inMemory/organization.repository';
 import { InMemoryPlaceRepository } from './inMemory/place.repository';
+import { InMemoryPriceRepository } from './inMemory/price.repository';
 import { InMemoryProductRepository } from './inMemory/product.repository';
 import { InMemorySectionRepository } from './inMemory/section.repository';
 import { InMemoryUserRepository } from './inMemory/user.repository';
@@ -17,6 +19,7 @@ import { PrismaCategoryRepository } from './prisma/category.repository';
 import { PrismaMenuRepository } from './prisma/menu.repository';
 import { PrismaOrganizationRepository } from './prisma/organization.repository';
 import { PrismaPlaceRepository } from './prisma/place.repository';
+import { PrismaPriceRepository } from './prisma/price.repository';
 import { PrismaProductRepository } from './prisma/product.repository';
 import { PrismaSectionRepository } from './prisma/section.repository';
 import { PrismaUserRepository } from './prisma/user.repository';
@@ -72,6 +75,13 @@ import { PrismaUserRepository } from './prisma/user.repository';
                     ? InMemorySectionRepository
                     : PrismaSectionRepository,
         },
+        {
+            provide: PriceRepository,
+            useClass:
+                process.env.NODE_ENV === 'test'
+                    ? InMemoryPriceRepository
+                    : PrismaPriceRepository,
+        },
     ],
     exports: [
         OrganizationRepository,
@@ -81,6 +91,7 @@ import { PrismaUserRepository } from './prisma/user.repository';
         CategoryRepository,
         MenuRepository,
         SectionRepository,
+        PriceRepository,
     ],
 })
 export class DatabaseModule {}
