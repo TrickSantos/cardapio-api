@@ -14,12 +14,16 @@ export class Price {
     private props: PriceProps;
 
     constructor(
-        props: Replace<PriceProps, { createdAt?: Date; updatedAt?: Date }>,
+        props: Replace<
+            PriceProps,
+            { createdAt?: Date; updatedAt?: Date; isActive?: boolean }
+        >,
         id?: string,
     ) {
         this._id = id || randomUUID();
         this.props = {
             ...props,
+            isActive: props.isActive || true,
             createdAt: props.createdAt || new Date(),
             updatedAt: props.updatedAt || new Date(),
         };

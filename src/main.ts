@@ -4,6 +4,7 @@ import {
     FastifyAdapter,
     NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import multipart from '@fastify/multipart';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -11,6 +12,12 @@ async function bootstrap() {
         AppModule,
         new FastifyAdapter(),
     );
+
+    app.register(multipart, { addToBody: true });
+
+    app.enableCors({
+        origin: '*',
+    });
 
     app.useGlobalPipes(new ZodValidationPipe());
 

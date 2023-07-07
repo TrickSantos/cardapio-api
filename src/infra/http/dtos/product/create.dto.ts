@@ -5,10 +5,10 @@ export const createProductSchema = z.object({
     name: z.string().nonempty('Name is required'),
     description: z.string().nonempty('Description is required'),
     categories: z.array(z.string().uuid()).nonempty('Categories is required'),
+    photos: z.array(z.string().url()).nonempty('Photos is required'),
     price: z
-        .object({
-            placeId: z.string().uuid().nonempty('PlaceId is required'),
-            value: z.number(),
+        .number({
+            invalid_type_error: 'Price must be a valid number',
         })
         .optional(),
     placeId: z

@@ -14,7 +14,6 @@ describe('Product', () => {
     it('should create an instance with price', () => {
         const product = makeProduct({
             price: new Price({
-                placeId: 'test',
                 productId: 'test',
                 value: 10,
                 isActive: true,
@@ -30,13 +29,11 @@ describe('Product', () => {
         const product = makeProduct({
             priceHistory: [
                 new Price({
-                    placeId: 'test',
                     productId: 'test',
                     value: 10,
                     isActive: false,
                 }),
                 new Price({
-                    placeId: 'test',
                     productId: 'test',
                     value: 20,
                     isActive: true,

@@ -1,8 +1,10 @@
 import { Price } from '@domain/entities/place/price/price';
 import { PriceRepository } from '@domain/repositories/price.repository';
 import { PriceMapper } from '@mappers/price.mapper';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 
+@Injectable()
 export class PrismaPriceRepository implements PriceRepository {
     constructor(private prisma: PrismaService) {}
 

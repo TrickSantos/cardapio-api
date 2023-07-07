@@ -2,7 +2,9 @@ import { Product } from '@domain/entities/place/product/product';
 import { ProductRepository } from '@domain/repositories/product.repository';
 import { PrismaService } from './prisma.service';
 import { ProductMapper } from '@mappers/product.mapper';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class PrismaProductRepository implements ProductRepository {
     constructor(private prisma: PrismaService) {}
 

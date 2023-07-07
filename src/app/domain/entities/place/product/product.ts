@@ -10,6 +10,7 @@ export type ProductProps = {
     categories: Category[];
     price: Price | null;
     priceHistory: Price[];
+    photos: string[];
     isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -27,6 +28,7 @@ export class Product {
                 updatedAt?: Date;
                 categories?: Category[];
                 priceHistory?: Price[];
+                photos?: string[];
             }
         >,
         id?: string,
@@ -36,6 +38,7 @@ export class Product {
             ...props,
             priceHistory: props.priceHistory || [],
             categories: props.categories || [],
+            photos: props.photos || [],
             createdAt: props.createdAt || new Date(),
             updatedAt: props.updatedAt || new Date(),
         };
@@ -59,6 +62,10 @@ export class Product {
 
     get categories(): Category[] {
         return this.props.categories;
+    }
+
+    get photos(): string[] {
+        return this.props.photos;
     }
 
     get price(): Price | null {
@@ -96,6 +103,7 @@ export class Product {
             name: this.name,
             description: this.description,
             categories: this.categories,
+            photos: this.photos,
             isActive: this.isActive,
             price: this.props.price,
             priceHistory: this.props.priceHistory,

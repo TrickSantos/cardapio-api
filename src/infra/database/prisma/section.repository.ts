@@ -1,8 +1,10 @@
 import { Section } from '@domain/entities/place/section/section';
 import { SectionRepository } from '@domain/repositories/section.repository';
 import { SectionMapper } from '@mappers/section.mapper';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 
+@Injectable()
 export class PrismaSectionRepository implements SectionRepository {
     constructor(private prisma: PrismaService) {}
 

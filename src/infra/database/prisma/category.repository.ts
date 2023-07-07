@@ -1,8 +1,10 @@
 import { Category } from '@domain/entities/place/category/category';
 import { CategoryRepository } from '@domain/repositories/category.repository';
 import { CategoryMapper } from '@mappers/category.mapper';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 
+@Injectable()
 export class PrismaCategoryRepository implements CategoryRepository {
     constructor(private prisma: PrismaService) {}
 

@@ -15,6 +15,7 @@ import { PriceController } from './controllers/price.controller';
 import { ProductsController } from './controllers/product.controller';
 import { SectionController } from './controllers/section.controller';
 import { UsersController } from './controllers/users.controller';
+import { SupabaseModule } from '@infra/uploads/supabase/supabase.module';
 
 @Module({
     controllers: [
@@ -36,6 +37,7 @@ import { UsersController } from './controllers/users.controller';
         PriceUseCaseModule,
         MenuUseCaseModule,
         SectionUseCaseModule,
+        SupabaseModule,
     ],
 })
 export class HttpModule {}

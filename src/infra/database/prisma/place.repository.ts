@@ -1,8 +1,10 @@
 import { Place } from '@domain/entities/place/place';
 import { PlaceRepository } from '@domain/repositories/place.repository';
 import { PlaceMapper } from '@mappers/place.mapper';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 
+@Injectable()
 export class PrismaPlaceRepository implements PlaceRepository {
     constructor(private prisma: PrismaService) {}
 

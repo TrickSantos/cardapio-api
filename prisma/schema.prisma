@@ -98,6 +98,16 @@ model Product {
   place       Place      @relation(fields: [placeId], references: [id])
   price       Price[]
   categories  Category[]
+  images      Image[]
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  productId String
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Price {

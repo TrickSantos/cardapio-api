@@ -1,8 +1,10 @@
 import { Menu } from '@domain/entities/place/menu/menu';
 import { MenuRepository } from '@domain/repositories/menu.repository';
 import { MenuMapper } from '@mappers/menu.mapper';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 
+@Injectable()
 export class PrismaMenuRepository implements MenuRepository {
     constructor(private prisma: PrismaService) {}
 

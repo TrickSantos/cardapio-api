@@ -1,13 +1,28 @@
 import { Organization } from '@domain/entities/organization/organization';
 import { OrganizationRepository } from '@domain/repositories/organization.repository';
 import { OrganizationMapper } from '@mappers/organization.mapper';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
+import { Place } from '@domain/entities/place/place';
+import { PlaceMapper } from '@mappers/place.mapper';
 
+@Injectable()
 export class PrismaOrganizationRepository implements OrganizationRepository {
-    constructor(private prisma: PrismaService) {}
+    constructor(private readonly prisma: PrismaService) {}
+
+    async findAllPlaces(id: string): Promise<Place[]> {
+        const places = await this.prisma.place.findMany({
+            where: {
+                organizationId: id,
+            },
+        });
+
+        return places.map((place) => PlaceMapper.toDomain(place));
+    }
 
     async create(organization: Organization): Promise<void> {
         const data = OrganizationMapper.toPersistence(organization);
+
         await this.prisma.organization.create({
             data,
         });

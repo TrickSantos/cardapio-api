@@ -5,6 +5,7 @@ import { DeleteOrganizationUseCase } from './delete';
 import { FindOrganizationByIdUseCase } from './findById';
 import { ListAllOrganizationsUseCase } from './listAll';
 import { UpdateOrganizationUseCase } from './update';
+import { FindAllPlacesUseCase } from './findAllPlaces';
 
 @Module({
     imports: [DatabaseModule],
@@ -14,6 +15,7 @@ import { UpdateOrganizationUseCase } from './update';
         FindOrganizationByIdUseCase,
         ListAllOrganizationsUseCase,
         UpdateOrganizationUseCase,
+        FindAllPlacesUseCase,
     ],
     exports: [
         CreateOrganizationUseCase,
@@ -21,6 +23,7 @@ import { UpdateOrganizationUseCase } from './update';
         FindOrganizationByIdUseCase,
         ListAllOrganizationsUseCase,
         UpdateOrganizationUseCase,
+        FindAllPlacesUseCase,
     ],
 })
 export class OrganizationUseCaseModule {}

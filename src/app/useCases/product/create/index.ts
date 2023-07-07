@@ -1,19 +1,17 @@
 import { Category } from '@domain/entities/place/category/category';
+import { Price } from '@domain/entities/place/price/price';
 import { Product } from '@domain/entities/place/product/product';
 import { CategoryRepository } from '@domain/repositories/category.repository';
 import { ProductRepository } from '@domain/repositories/product.repository';
 import { Injectable } from '@nestjs/common';
-import { makePrice } from '@test/factories/price.factory';
 
 type CreateProductDTO = {
     placeId: string;
     name: string;
     description: string;
     categories: string[];
-    price?: {
-        placeId: string;
-        value: number;
-    };
+    photos: string[];
+    price?: number;
 };
 
 @Injectable()
@@ -39,13 +37,14 @@ export class CreateProductUseCase {
             name: data.name,
             description: data.description,
             categories: categorias,
+            photos: data.photos,
             isActive: true,
             price: null,
         });
 
         if (data.price) {
-            const price = makePrice({
-                value: data.price.value,
+            const price = new Price({
+                value: data.price,
                 productId: product.id,
             });
             product.update({ price });

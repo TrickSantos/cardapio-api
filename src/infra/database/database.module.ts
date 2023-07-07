@@ -20,12 +20,14 @@ import { PrismaMenuRepository } from './prisma/menu.repository';
 import { PrismaOrganizationRepository } from './prisma/organization.repository';
 import { PrismaPlaceRepository } from './prisma/place.repository';
 import { PrismaPriceRepository } from './prisma/price.repository';
+import { PrismaService } from './prisma/prisma.service';
 import { PrismaProductRepository } from './prisma/product.repository';
 import { PrismaSectionRepository } from './prisma/section.repository';
 import { PrismaUserRepository } from './prisma/user.repository';
 
 @Module({
     providers: [
+        PrismaService,
         {
             provide: OrganizationRepository,
             useClass:
@@ -84,6 +86,7 @@ import { PrismaUserRepository } from './prisma/user.repository';
         },
     ],
     exports: [
+        PrismaService,
         OrganizationRepository,
         UserRepository,
         PlaceRepository,

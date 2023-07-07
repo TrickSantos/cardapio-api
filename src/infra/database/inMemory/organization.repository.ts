@@ -1,5 +1,7 @@
 import { Organization } from '@domain/entities/organization/organization';
+import { Place } from '@domain/entities/place/place';
 import { OrganizationRepository } from '@domain/repositories/organization.repository';
+import { makePlace } from '@test/factories/place.factory';
 
 export class InMemoryOrganizationRepository implements OrganizationRepository {
     private organizations: Organization[] = [];
@@ -26,6 +28,18 @@ export class InMemoryOrganizationRepository implements OrganizationRepository {
 
     async findAll(): Promise<Organization[]> {
         return this.organizations.filter((org) => org.isActive);
+    }
+
+    async findAllPlaces(id: string): Promise<Place[]> {
+        const organization = this.organizations.find(
+            (organization) => organization.id === id,
+        );
+
+        if (organization) {
+            return [makePlace({ organizationId: organization.id })];
+        }
+
+        return [];
     }
 
     async findById(id: string) {

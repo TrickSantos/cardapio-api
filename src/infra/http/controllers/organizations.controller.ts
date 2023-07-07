@@ -14,6 +14,7 @@ import { ListAllOrganizationsUseCase } from '@useCases/organization/listAll';
 import { UpdateOrganizationUseCase } from '@useCases/organization/update';
 import { CreateOrganizationDTO } from '../dtos/organization/create.dto';
 import { UpdateOrganizationDTO } from '../dtos/organization/update.dto';
+import { FindAllPlacesUseCase } from '@useCases/organization/findAllPlaces';
 
 @Controller('organizations')
 export class OrganizationsController {
@@ -21,6 +22,7 @@ export class OrganizationsController {
         private createOrganization: CreateOrganizationUseCase,
         private listAllOrganizations: ListAllOrganizationsUseCase,
         private findByIdOrganization: FindOrganizationByIdUseCase,
+        private findAllPlaces: FindAllPlacesUseCase,
         private updateOrganization: UpdateOrganizationUseCase,
         private deleteOrganization: DeleteOrganizationUseCase,
     ) {}
@@ -35,6 +37,12 @@ export class OrganizationsController {
     async findById(@Param('id') id: string) {
         const organization = await this.findByIdOrganization.execute(id);
         return organization.toJSON();
+    }
+
+    @Get(':id/places')
+    async findPlaces(@Param('id') id: string) {
+        const places = await this.findAllPlaces.execute(id);
+        return places.map((place) => place.toJSON());
     }
 
     @Post()

@@ -6,6 +6,7 @@ import {
     Param,
     Post,
     Put,
+    Req,
 } from '@nestjs/common';
 import { CreateProductUseCase } from '@useCases/product/create';
 import { DeleteProductUseCase } from '@useCases/product/delete';
@@ -14,6 +15,7 @@ import { ListAllProductsUseCase } from '@useCases/product/listAll';
 import { UpdateProductUseCase } from '@useCases/product/update';
 import { CreateProductDTO } from '../dtos/product/create.dto';
 import { UpdateProductDTO } from '../dtos/product/update.dto';
+import { SupabaseService } from '@infra/uploads/supabase/supabase.service';
 
 @Controller('products')
 export class ProductsController {
@@ -23,7 +25,16 @@ export class ProductsController {
         private findProductById: FindProductByIdUseCase,
         private updateProduct: UpdateProductUseCase,
         private deleteProduct: DeleteProductUseCase,
+        private supabase: SupabaseService,
     ) {}
+
+    @Post('upload')
+    async upload(@Req() req: any) {
+        const { body } = req;
+        const file = body.image;
+
+        return await this.supabase.uploadFile(file);
+    }
 
     @Get()
     async listAll() {

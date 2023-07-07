@@ -11,6 +11,7 @@
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "start": "nest start",
         "dev": "nest start --watch",
+        "seed": "ts-node ./prisma/seed.ts",
         "start:debug": "nest start --debug --watch",
         "start:prod": "node dist/main",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -23,15 +24,18 @@
     "dependencies": {
         "@anatine/zod-nestjs": "^1.10.0",
         "@anatine/zod-openapi": "^1.14.0",
+        "@fastify/multipart": "^7.7.0",
         "@nestjs/common": "^9.4.2",
         "@nestjs/core": "^9.4.2",
         "@nestjs/platform-express": "^9.4.2",
         "@nestjs/platform-fastify": "^9.4.2",
         "@nestjs/swagger": "^6.3.0",
-        "@prisma/client": "4.14.1",
+        "@prisma/client": "4.15.0",
+        "@supabase/supabase-js": "^2.26.0",
         "@swc/jest": "^0.2.26",
         "class-transformer": "^0.5.1",
         "class-validator": "^0.14.0",
+        "fastify": "^4.19.2",
         "openapi3-ts": "^3.2.0",
         "reflect-metadata": "^0.1.13",
         "rimraf": "^3.0.2",
@@ -70,6 +74,9 @@
         "vite-tsconfig-paths": "^4.2.0",
         "vitest": "^0.31.4",
         "webpack": "^5.85.1"
+    },
+    "prisma": {
+        "seed": "ts-node prisma/seed.ts"
     },
     "lint-staged": {
         "**/*": "prettier --write --ignore-unknown"
