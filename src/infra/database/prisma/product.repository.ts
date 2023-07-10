@@ -1,5 +1,8 @@
 import { Product } from '@domain/entities/place/product/product';
-import { ProductRepository } from '@domain/repositories/product.repository';
+import {
+    FindAllPayload,
+    ProductRepository,
+} from '@domain/repositories/product.repository';
 import { PrismaService } from './prisma.service';
 import { ProductMapper } from '@mappers/product.mapper';
 import { Injectable } from '@nestjs/common';
@@ -49,10 +52,17 @@ export class PrismaProductRepository implements ProductRepository {
         return null;
     }
 
-    async findAll(): Promise<Product[]> {
+    async findAll(props: FindAllPayload): Promise<Product[]> {
+        const { placeId, photos = false } = props || {};
+
         const products = await this.prisma.product.findMany({
+            where: {
+                isActive: true,
+                ...(placeId && { placeId }),
+            },
             include: {
                 price: true,
+                images: photos,
             },
         });
         return products.map(ProductMapper.toDomain);

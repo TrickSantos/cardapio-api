@@ -14,6 +14,7 @@ import { ListAllPlacesUseCase } from '@useCases/place/listAll';
 import { UpdatePlaceUseCase } from '@useCases/place/update';
 import { CreatePlaceDTO } from '../dtos/place/create.dto';
 import { UpdatePlaceDTO } from '../dtos/place/update.dto';
+import { ListAllProductsUseCase } from '@useCases/product/listAll';
 
 @Controller('places')
 export class PlacesController {
@@ -23,12 +24,23 @@ export class PlacesController {
         private findPlaceById: FindPlaceByIdUseCase,
         private updatePlace: UpdatePlaceUseCase,
         private deletePlace: DeletePlaceUseCase,
+        private listProducts: ListAllProductsUseCase,
     ) {}
 
     @Get()
     async listAll() {
         const places = await this.listAllPlaces.execute();
         return places.map((place) => place.toJSON());
+    }
+
+    @Get(':id/products')
+    async listAllProducts(@Param('id') id: string) {
+        const place = await this.findPlaceById.execute(id);
+        const products = await this.listProducts.execute({
+            placeId: place.id,
+            photos: true,
+        });
+        return products.map((product) => product.toJSON());
     }
 
     @Get(':id')
