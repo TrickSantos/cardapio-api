@@ -40,9 +40,9 @@ export class ProductMapper {
     static toDomain(product: ProductPersistence): Product {
         const categories = product.categories?.map(CategoryMapper.toDomain);
         const price = product.price?.filter((p) => p.isActive)[0];
-        const priceHistory = product.price?.filter((p) => !p.isActive);
+        const priceHistory = product.price?.filter((p) => p.isActive === false);
 
-        const p = new Product(
+        return new Product(
             {
                 name: product.name,
                 description: product.description,
@@ -59,7 +59,5 @@ export class ProductMapper {
             },
             product.id,
         );
-
-        return p;
     }
 }

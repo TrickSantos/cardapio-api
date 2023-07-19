@@ -68,6 +68,14 @@ export class PrismaProductRepository implements ProductRepository {
                 },
                 ...(data.price && {
                     price: {
+                        updateMany: {
+                            where: {
+                                isActive: true,
+                            },
+                            data: {
+                                isActive: false,
+                            },
+                        },
                         create: {
                             value: data.price.value,
                             id: data.price.id,

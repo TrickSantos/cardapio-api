@@ -105,8 +105,10 @@ export class Product {
             categories: this.categories,
             photos: this.photos,
             isActive: this.isActive,
-            price: this.props.price,
-            priceHistory: this.props.priceHistory,
+            price: this.props.price?.toJSON(),
+            priceHistory: this.props.priceHistory.map((price) =>
+                price.toJSON(),
+            ),
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
         };

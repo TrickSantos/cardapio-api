@@ -23,7 +23,7 @@ export class Price {
         this._id = id || randomUUID();
         this.props = {
             ...props,
-            isActive: props.isActive || true,
+            isActive: props.isActive ?? true,
             createdAt: props.createdAt || new Date(),
             updatedAt: props.updatedAt || new Date(),
         };
