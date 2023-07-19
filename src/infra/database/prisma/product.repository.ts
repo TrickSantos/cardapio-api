@@ -14,17 +14,81 @@ export class PrismaProductRepository implements ProductRepository {
     async create(product: Product): Promise<void> {
         const data = ProductMapper.toPersistence(product);
         await this.prisma.product.create({
-            data,
+            data: {
+                name: data.name,
+                description: data.description,
+                placeId: data.placeId,
+                categories: {
+                    connect: data.categories?.map((category) => ({
+                        id: category.id,
+                    })),
+                },
+                ...(data.price && {
+                    price: {
+                        create: {
+                            value: data.price.value,
+                            id: data.price.id,
+                            createdAt: data.price.createdAt,
+                            isActive: data.price.isActive,
+                            updatedAt: data.price.updatedAt,
+                        },
+                    },
+                }),
+                ...(data.images && {
+                    images: {
+                        createMany: {
+                            skipDuplicates: true,
+                            data: data.images.map((image) => ({
+                                url: image.url,
+                            })),
+                        },
+                    },
+                }),
+                isActive: data.isActive,
+                createdAt: data.createdAt,
+                updatedAt: data.updatedAt,
+            },
         });
     }
 
     async update(product: Product): Promise<void> {
+        const data = ProductMapper.toPersistence(product);
+
         await this.prisma.product.update({
-            where: { id: product.id },
+            where: {
+                id: data.id,
+            },
             data: {
-                name: product.name,
-                description: product.description,
-                isActive: product.isActive,
+                name: data.name,
+                description: data.description,
+                categories: {
+                    set: data.categories?.map((category) => ({
+                        id: category.id,
+                    })),
+                },
+                ...(data.price && {
+                    price: {
+                        create: {
+                            value: data.price.value,
+                            id: data.price.id,
+                            isActive: data.price.isActive,
+                            createdAt: data.price.createdAt,
+                            updatedAt: data.price.updatedAt,
+                        },
+                    },
+                }),
+                ...(data.images && {
+                    images: {
+                        createMany: {
+                            data: data.images.map((image) => ({
+                                url: image.url,
+                            })),
+                        },
+                    },
+                }),
+                isActive: data.isActive,
+                createdAt: data.createdAt,
+                updatedAt: data.updatedAt,
             },
         });
     }
@@ -49,6 +113,7 @@ export class PrismaProductRepository implements ProductRepository {
         if (product) {
             return ProductMapper.toDomain(product);
         }
+
         return null;
     }
 
@@ -61,6 +126,7 @@ export class PrismaProductRepository implements ProductRepository {
                 ...(placeId && { placeId }),
             },
             include: {
+                categories: true,
                 price: true,
                 images: photos,
             },

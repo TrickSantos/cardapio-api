@@ -1,10 +1,8 @@
 import { Category } from '@domain/entities/place/category/category';
-import { Prisma, Category as CategoryPersistence } from '@prisma/client';
+import { Category as CategoryPersistence } from '@prisma/client';
 
 export class CategoryMapper {
-    static toPersistence(
-        category: Category,
-    ): Prisma.CategoryUncheckedCreateInput {
+    static toPersistence(category: Category): CategoryPersistence {
         return {
             id: category.id,
             name: category.name,

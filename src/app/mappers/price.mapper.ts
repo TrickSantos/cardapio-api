@@ -1,8 +1,8 @@
 import { Price } from '@domain/entities/place/price/price';
-import { Prisma, Price as PrismaPrice } from '@prisma/client';
+import { Price as PrismaPrice } from '@prisma/client';
 
 export class PriceMapper {
-    static toPersistence(price: Price): Prisma.PriceUncheckedCreateInput {
+    static toPersistence(price: Price): PrismaPrice {
         return {
             id: price.id,
             productId: price.productId,

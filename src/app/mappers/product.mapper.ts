@@ -3,7 +3,6 @@ import {
     Category,
     Image,
     Price,
-    Prisma,
     Product as PrismaProduct,
 } from '@prisma/client';
 import { CategoryMapper } from './category.mapper';
@@ -16,29 +15,23 @@ type ProductPersistence = PrismaProduct & {
 };
 
 export class ProductMapper {
-    static toPersistence(product: Product): Prisma.ProductUncheckedCreateInput {
+    static toPersistence(product: Product) {
         return {
             id: product.id,
             name: product.name,
             description: product.description,
             placeId: product.placeId,
-            ...(product.price && {
-                price: {
-                    connectOrCreate: {
-                        where: { id: product.price.id },
-                        create: {
-                            value: product.price.value,
-                            id: product.price.id,
-                        },
-                    },
-                },
+            ...(product.categories && {
+                categories: product.categories.map(
+                    CategoryMapper.toPersistence,
+                ),
             }),
-            images: {
-                createMany: {
-                    skipDuplicates: true,
-                    data: product.photos?.map((photo) => ({ url: photo })),
-                },
-            },
+            ...(product.price && {
+                price: PriceMapper.toPersistence(product.price),
+            }),
+            ...(product.photos && {
+                images: product.photos?.map((photo) => ({ url: photo })),
+            }),
             isActive: product.isActive,
             createdAt: product.createdAt,
             updatedAt: product.updatedAt,
@@ -49,7 +42,7 @@ export class ProductMapper {
         const price = product.price?.filter((p) => p.isActive)[0];
         const priceHistory = product.price?.filter((p) => !p.isActive);
 
-        return new Product(
+        const p = new Product(
             {
                 name: product.name,
                 description: product.description,
@@ -66,5 +59,7 @@ export class ProductMapper {
             },
             product.id,
         );
+
+        return p;
     }
 }

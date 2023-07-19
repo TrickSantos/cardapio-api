@@ -1,4 +1,5 @@
 import { Category } from '@domain/entities/place/category/category';
+import { Price } from '@domain/entities/place/price/price';
 import { CategoryRepository } from '@domain/repositories/category.repository';
 import { ProductRepository } from '@domain/repositories/product.repository';
 import { Injectable } from '@nestjs/common';
@@ -10,6 +11,7 @@ type UpdateProductDTO = {
     name?: string;
     description?: string;
     categories?: string[];
+    price?: number;
 };
 
 @Injectable()
@@ -19,7 +21,7 @@ export class UpdateProductUseCase {
         private categoryRepository: CategoryRepository,
     ) {}
 
-    async execute({ categories, ...data }: UpdateProductDTO) {
+    async execute({ categories, price, ...data }: UpdateProductDTO) {
         const product = await this.repository.findById(data.id);
 
         if (!product) throw new ProductNotFound();
@@ -38,7 +40,12 @@ export class UpdateProductUseCase {
             product.update({ categories: categorias });
         }
 
-        product.update({ ...data });
+        product.update({
+            ...data,
+            price: price
+                ? new Price({ productId: data.id, value: price })
+                : null,
+        });
 
         return this.repository.update(product);
     }
