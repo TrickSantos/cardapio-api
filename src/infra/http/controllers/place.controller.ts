@@ -6,6 +6,7 @@ import {
     Param,
     Post,
     Put,
+    Query,
 } from '@nestjs/common';
 import { CreatePlaceUseCase } from '@useCases/place/create';
 import { DeletePlaceUseCase } from '@useCases/place/delete';
@@ -15,6 +16,8 @@ import { UpdatePlaceUseCase } from '@useCases/place/update';
 import { CreatePlaceDTO } from '../dtos/place/create.dto';
 import { UpdatePlaceDTO } from '../dtos/place/update.dto';
 import { ListAllProductsUseCase } from '@useCases/product/listAll';
+import { ListAllCategoriesUseCase } from '@useCases/category/listAll';
+import { ListAllCategoriesDTO } from '../dtos/place/listAllCategories';
 
 @Controller('places')
 export class PlacesController {
@@ -25,6 +28,7 @@ export class PlacesController {
         private updatePlace: UpdatePlaceUseCase,
         private deletePlace: DeletePlaceUseCase,
         private listProducts: ListAllProductsUseCase,
+        private listCategories: ListAllCategoriesUseCase,
     ) {}
 
     @Get()
@@ -41,6 +45,19 @@ export class PlacesController {
             photos: true,
         });
         return products.map((product) => product.toJSON());
+    }
+
+    @Get(':id/categories')
+    async listAllCategories(
+        @Param('id') id: string,
+        @Query() query: ListAllCategoriesDTO,
+    ) {
+        const place = await this.findPlaceById.execute(id);
+        const categories = await this.listCategories.execute({
+            placeId: place.id,
+            ...(query.isActive && { isActive: query.isActive }),
+        });
+        return categories.map((product) => product.toJSON());
     }
 
     @Get(':id')

@@ -1,5 +1,8 @@
 import { Category } from '@domain/entities/place/category/category';
-import { CategoryRepository } from '@domain/repositories/category.repository';
+import {
+    CategoryRepository,
+    FindAllPayload,
+} from '@domain/repositories/category.repository';
 import { CategoryMapper } from '@mappers/category.mapper';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
@@ -42,11 +45,19 @@ export class PrismaCategoryRepository implements CategoryRepository {
         if (category) {
             return CategoryMapper.toDomain(category);
         }
+
         return null;
     }
 
-    async findAll(): Promise<Category[]> {
-        const categories = await this.prisma.category.findMany();
+    async findAll(props?: FindAllPayload): Promise<Category[]> {
+        const { placeId, isActive } = props || {};
+
+        const categories = await this.prisma.category.findMany({
+            where: {
+                ...(isActive && { isActive }),
+                ...(placeId && { placeId }),
+            },
+        });
         return categories.map(CategoryMapper.toDomain);
     }
 }

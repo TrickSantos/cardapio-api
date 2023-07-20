@@ -9,6 +9,7 @@ export const CreateCategorySchema = z.object({
             message: 'PlaceId must be a valid UUID',
         })
         .nonempty('PlaceId is required'),
+    isActive: z.boolean().optional().default(true),
 });
 
 export class CreateCategoryDTO extends createZodDto(CreateCategorySchema) {}
