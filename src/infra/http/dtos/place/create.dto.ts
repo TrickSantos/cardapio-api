@@ -9,7 +9,7 @@ export const CreatePlaceSchema = z.object({
     state: z.string({ required_error: 'State is required' }),
     zip: z
         .string({ required_error: 'Zip is required' })
-        .length(8, { message: 'Zip must be 8 characters' }),
+        .length(9, { message: 'Zip must be 9 characters' }),
     phone: z.string({ required_error: 'Phone is required' }),
     website: z.string({ required_error: 'Website is required' }).url({
         message: 'Website must be a valid URL',

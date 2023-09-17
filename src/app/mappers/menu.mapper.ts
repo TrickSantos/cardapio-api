@@ -1,13 +1,13 @@
 import { Menu } from '@domain/entities/place/menu/menu';
-import { Section, Menu as PrismaMenu, Prisma } from '@prisma/client';
+import { Section, Menu as PrismaMenu } from '@prisma/client';
 import { SectionMapper } from './section.mapper';
 
 type MenuPersistence = PrismaMenu & {
-    sections?: Section[];
+    sections: Section[];
 };
 
 export class MenuMapper {
-    static toPersistence(menu: Menu): Prisma.MenuUncheckedCreateInput {
+    static toPersistence(menu: Menu) {
         return {
             id: menu.id,
             name: menu.name,
@@ -16,11 +16,12 @@ export class MenuMapper {
             isActive: menu.isActive,
             createdAt: menu.createdAt,
             updatedAt: menu.updatedAt,
+            sections: menu.sections.map(SectionMapper.toPersistence),
         };
     }
 
     static toDomain(menu: MenuPersistence): Menu {
-        const sections = menu.sections?.map(SectionMapper.toDomain);
+        const sections = menu.sections.map(SectionMapper.toDomain);
 
         return new Menu(
             {

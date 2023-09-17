@@ -18,6 +18,7 @@ import { UpdatePlaceDTO } from '../dtos/place/update.dto';
 import { ListAllProductsUseCase } from '@useCases/product/listAll';
 import { ListAllCategoriesUseCase } from '@useCases/category/listAll';
 import { ListAllCategoriesDTO } from '../dtos/place/listAllCategories';
+import { ListAllMenusUseCase } from '@useCases/menu/listAll';
 
 @Controller('places')
 export class PlacesController {
@@ -29,6 +30,7 @@ export class PlacesController {
         private deletePlace: DeletePlaceUseCase,
         private listProducts: ListAllProductsUseCase,
         private listCategories: ListAllCategoriesUseCase,
+        private listMenus: ListAllMenusUseCase,
     ) {}
 
     @Get()
@@ -58,6 +60,19 @@ export class PlacesController {
             ...(query.isActive && { isActive: query.isActive }),
         });
         return categories.map((product) => product.toJSON());
+    }
+
+    @Get(':id/menus')
+    async listAllMenus(
+        @Param('id') id: string,
+        @Query() query: ListAllCategoriesDTO,
+    ) {
+        const place = await this.findPlaceById.execute(id);
+        const menus = await this.listMenus.execute({
+            placeId: place.id,
+            ...(query.isActive && { isActive: query.isActive }),
+        });
+        return menus.map((product) => product.toJSON());
     }
 
     @Get(':id')
