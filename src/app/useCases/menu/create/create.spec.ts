@@ -15,7 +15,7 @@ describe('Create Menu', () => {
 
     it('should create a menu', async () => {
         menu = makeMenu();
-        await useCase.execute(menu);
+        await useCase.execute(menu.toJSON());
         const menus = await repository.findAll();
         expect(menus).toHaveLength(1);
         expect(menus[0].name).toEqual(menu.name);
