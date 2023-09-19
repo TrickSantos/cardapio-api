@@ -5,7 +5,6 @@ describe('Role', () => {
     it('should create a role', () => {
         const role = new Role({
             name: 'name',
-            description: 'description',
         });
 
         expect(role).toBeDefined();
@@ -15,7 +14,6 @@ describe('Role', () => {
     it('should update a role', () => {
         const role = new Role({
             name: 'name',
-            description: 'description',
         });
 
         role.update({

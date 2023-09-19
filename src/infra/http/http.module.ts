@@ -16,6 +16,8 @@ import { ProductsController } from './controllers/product.controller';
 import { SectionController } from './controllers/section.controller';
 import { UsersController } from './controllers/users.controller';
 import { SupabaseModule } from '@infra/uploads/supabase/supabase.module';
+import { RoleController } from './controllers/role.controller';
+import { RoleUseCaseModule } from '@useCases/role/role.module';
 
 @Module({
     controllers: [
@@ -27,6 +29,7 @@ import { SupabaseModule } from '@infra/uploads/supabase/supabase.module';
         PriceController,
         MenuController,
         SectionController,
+        RoleController,
     ],
     imports: [
         OrganizationUseCaseModule,
@@ -38,6 +41,7 @@ import { SupabaseModule } from '@infra/uploads/supabase/supabase.module';
         MenuUseCaseModule,
         SectionUseCaseModule,
         SupabaseModule,
+        RoleUseCaseModule,
     ],
 })
 export class HttpModule {}
