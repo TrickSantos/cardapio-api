@@ -3,6 +3,8 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     Param,
     Post,
     Put,
@@ -14,6 +16,8 @@ import { ListAllRolesUseCase } from '@useCases/role/listAll';
 import { UpdateRoleUseCase } from '@useCases/role/update';
 import { CreateRoleDTO } from '../dtos/role/create.dto';
 import { UpdateRoleDTO } from '../dtos/role/update.dto';
+import { AddUsersToRoleUseCase } from '@useCases/role/addUsers';
+import { AddUsersToRoleDTO } from '../dtos/role/addUsers.dto';
 
 @Controller('roles')
 export class RoleController {
@@ -23,6 +27,7 @@ export class RoleController {
         private findByIdRole: FindRoleByIdUseCase,
         private updateRole: UpdateRoleUseCase,
         private deleteRole: DeleteRoleUseCase,
+        private addUsersToRole: AddUsersToRoleUseCase,
     ) {}
 
     @Get()
@@ -33,8 +38,17 @@ export class RoleController {
 
     @Get(':id')
     async findById(@Param('id') id: string) {
-        const category = await this.findByIdRole.execute(id);
-        return category.toJSON();
+        const role = await this.findByIdRole.execute(id);
+        return role.toJSON();
+    }
+
+    @Post(':id/users')
+    @HttpCode(HttpStatus.CREATED)
+    async addUsers(@Param('id') id: string, @Body() body: AddUsersToRoleDTO) {
+        await this.addUsersToRole.execute({
+            roleId: id,
+            users: body.users,
+        });
     }
 
     @Post()
@@ -43,6 +57,7 @@ export class RoleController {
     }
 
     @Put(':id')
+    @HttpCode(HttpStatus.OK)
     async update(@Param('id') id: string, @Body() body: UpdateRoleDTO) {
         await this.updateRole.execute({
             id,

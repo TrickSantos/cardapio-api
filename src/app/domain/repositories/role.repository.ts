@@ -6,4 +6,6 @@ export abstract class RoleRepository {
     abstract delete(id: string): Promise<void>;
     abstract findById(id: string): Promise<Role | null>;
     abstract findAll(): Promise<Role[]>;
+    abstract addUser(roleId: string, userId: string): Promise<void>;
+    abstract removeUser(roleId: string, userId: string): Promise<void>;
 }

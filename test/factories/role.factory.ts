@@ -6,7 +6,8 @@ type Override = Partial<RoleProps>;
 export function makeRole(props: Override = {}): Role {
     return new Role({
         name: faker.name.jobTitle(),
-        description: faker.lorem.sentence(),
+        description: faker.name.jobDescriptor(),
+        isActive: faker.datatype.boolean(),
         ...props,
     });
 }

@@ -45,11 +45,54 @@ describe('RoleController', () => {
             await roleController.create({
                 name: data.name,
                 isActive: data.isActive,
+                description: data.description,
+                permissions: [],
             });
 
             const roles = await roleController.listAll();
 
             expect(roles).toHaveLength(1);
+        });
+    });
+
+    describe('addUsers', () => {
+        let role: any;
+
+        beforeEach(async () => {
+            const data = makeRole();
+
+            await roleController.create({
+                name: data.name,
+                description: data.description,
+                permissions: [],
+                isActive: data.isActive,
+            });
+
+            const roles = await roleController.listAll();
+
+            role = roles[0];
+        });
+
+        afterEach(async () => {
+            await roleController.delete(role.id);
+        });
+
+        it('should add users to a role', async () => {
+            await roleController.addUsers(role.id, {
+                users: [],
+            });
+
+            const find = await roleController.findById(role.id);
+
+            expect(find.users).toHaveLength(0);
+        });
+
+        it('should throw a NotFoundException', async () => {
+            await expect(
+                roleController.addUsers('123', {
+                    users: [],
+                }),
+            ).rejects.toThrow('Role not found');
         });
     });
 
@@ -61,6 +104,8 @@ describe('RoleController', () => {
 
             await roleController.create({
                 name: data.name,
+                description: data.description,
+                permissions: [],
                 isActive: data.isActive,
             });
 
@@ -94,6 +139,8 @@ describe('RoleController', () => {
 
             await roleController.create({
                 name: data.name,
+                description: data.description,
+                permissions: [],
                 isActive: data.isActive,
             });
 
@@ -136,6 +183,8 @@ describe('RoleController', () => {
 
             await roleController.create({
                 name: data.name,
+                description: data.description,
+                permissions: [],
                 isActive: data.isActive,
             });
 

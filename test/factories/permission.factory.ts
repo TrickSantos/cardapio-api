@@ -9,7 +9,8 @@ type Override = Partial<PermissionProps>;
 export function makePermission(props: Override = {}): Permission {
     return new Permission({
         name: faker.name.jobTitle(),
-        description: faker.lorem.sentence(),
+        description: faker.name.jobDescriptor(),
+        isActive: faker.datatype.boolean(),
         ...props,
     });
 }

@@ -5,6 +5,7 @@ import { DeleteRoleUseCase } from './delete';
 import { FindRoleByIdUseCase } from './findById';
 import { ListAllRolesUseCase } from './listAll';
 import { UpdateRoleUseCase } from './update';
+import { AddUsersToRoleUseCase } from './addUsers';
 
 @Module({
     imports: [DatabaseModule],
@@ -14,6 +15,7 @@ import { UpdateRoleUseCase } from './update';
         FindRoleByIdUseCase,
         ListAllRolesUseCase,
         UpdateRoleUseCase,
+        AddUsersToRoleUseCase,
     ],
     exports: [
         CreateRoleUseCase,
@@ -21,6 +23,7 @@ import { UpdateRoleUseCase } from './update';
         FindRoleByIdUseCase,
         ListAllRolesUseCase,
         UpdateRoleUseCase,
+        AddUsersToRoleUseCase,
     ],
 })
 export class RoleUseCaseModule {}

@@ -10,8 +10,6 @@ export type UserProps = {
     password: string;
     email: string;
     isActive: boolean;
-    permissions: Permission[];
-    roles: Role[];
     contact?: Contact;
     createdAt: Date;
     updatedAt: Date;
@@ -20,6 +18,8 @@ export type UserProps = {
 export class User {
     private _id: string;
     private props: UserProps;
+    private _roles: Map<string, Role>;
+    private _permissions: Map<string, Permission>;
 
     constructor(
         props: Replace<
@@ -39,9 +39,19 @@ export class User {
             ...props,
             createdAt: props.createdAt || new Date(),
             updatedAt: props.updatedAt || new Date(),
-            permissions: props.permissions || [],
-            roles: props.roles || [],
         };
+        this._roles = new Map();
+        this._permissions = new Map();
+
+        if (props.roles) {
+            props.roles.forEach((role) => this._roles.set(role.id, role));
+        }
+
+        if (props.permissions) {
+            props.permissions.forEach((permission) =>
+                this._permissions.set(permission.id, permission),
+            );
+        }
     }
 
     get id(): string {
@@ -65,11 +75,11 @@ export class User {
     }
 
     get permissions(): Permission[] {
-        return this.props.permissions;
+        return Array.from(this._permissions.values());
     }
 
     get roles(): Role[] {
-        return this.props.roles;
+        return Array.from(this._roles.values());
     }
 
     get contact(): Contact | undefined {
@@ -88,12 +98,52 @@ export class User {
         return this.props.updatedAt;
     }
 
-    public update(props: Partial<UserProps>): void {
+    public addRole(role: Role): void {
+        this._roles.set(role.id, role);
+    }
+
+    public addPermission(permission: Permission): void {
+        this._permissions.set(permission.id, permission);
+    }
+
+    public removeRole(role: Role): void {
+        this._roles.delete(role.id);
+    }
+
+    public removePermission(permission: Permission): void {
+        this._permissions.delete(permission.id);
+    }
+
+    public update(
+        props: Partial<
+            UserProps & {
+                permissions: Permission[];
+                roles: Role[];
+                contact: Contact;
+            }
+        >,
+    ): void {
         this.props = {
             ...this.props,
             ...props,
             updatedAt: new Date(),
         };
+
+        if (props.contact) {
+            this.props.contact = props.contact;
+        }
+
+        if (props.roles) {
+            this._roles = new Map();
+            props.roles.forEach((role) => this._roles.set(role.id, role));
+        }
+
+        if (props.permissions) {
+            this._permissions = new Map();
+            props.permissions.forEach((permission) =>
+                this._permissions.set(permission.id, permission),
+            );
+        }
     }
 
     public toJSON() {

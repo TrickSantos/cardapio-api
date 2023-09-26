@@ -27,6 +27,9 @@ import { PrismaUserRepository } from './prisma/user.repository';
 import { RoleRepository } from '@domain/repositories/role.repository';
 import { PrismaRoleRepository } from './prisma/role.repository';
 import { InMemoryRoleRepository } from './inMemory/role.repository';
+import { PermissionRepository } from '@domain/repositories/permission.repository';
+import { InMemoryPermissionRepository } from './inMemory/permission.repository';
+import { PrismaPermissionRepository } from './prisma/permission.repository';
 
 @Module({
     providers: [
@@ -94,6 +97,13 @@ import { InMemoryRoleRepository } from './inMemory/role.repository';
                     ? InMemoryRoleRepository
                     : PrismaRoleRepository,
         },
+        {
+            provide: PermissionRepository,
+            useClass:
+                process.env.NODE_ENV === 'test'
+                    ? InMemoryPermissionRepository
+                    : PrismaPermissionRepository,
+        },
     ],
     exports: [
         PrismaService,
@@ -106,6 +116,7 @@ import { InMemoryRoleRepository } from './inMemory/role.repository';
         SectionRepository,
         PriceRepository,
         RoleRepository,
+        PermissionRepository,
     ],
 })
 export class DatabaseModule {}

@@ -6,6 +6,7 @@ describe('Permission', () => {
         const permission = new Permission({
             name: 'name',
             description: 'description',
+            isActive: true,
         });
 
         expect(permission).toBeDefined();
@@ -16,6 +17,7 @@ describe('Permission', () => {
         const permission = new Permission({
             name: 'name',
             description: 'description',
+            isActive: true,
         });
 
         permission.update({

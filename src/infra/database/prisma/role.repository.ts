@@ -9,17 +9,52 @@ export class PrismaRoleRepository implements RoleRepository {
     constructor(private prisma: PrismaService) {}
 
     async create(role: Role): Promise<void> {
-        const data = RoleMapper.toPersistence(role);
+        const {
+            permissions,
+            users: _,
+            ...data
+        } = RoleMapper.toPersistence(role);
         await this.prisma.role.create({
-            data,
+            data: {
+                ...data,
+                permissions: {
+                    connect: permissions.map(({ id }) => ({ id })),
+                },
+            },
+        });
+    }
+
+    async addUser(roleId: string, userId: string): Promise<void> {
+        await this.prisma.role.update({
+            where: { id: roleId },
+            data: {
+                users: {
+                    connect: { id: userId },
+                },
+            },
+        });
+    }
+
+    async removeUser(roleId: string, userId: string): Promise<void> {
+        await this.prisma.role.update({
+            where: { id: roleId },
+            data: {
+                users: {
+                    disconnect: { id: userId },
+                },
+            },
         });
     }
 
     async update(role: Role): Promise<void> {
+        const { permissions, users, ...data } = RoleMapper.toPersistence(role);
         await this.prisma.role.update({
             where: { id: role.id },
             data: {
-                name: role.name,
+                ...data,
+                permissions: {
+                    set: permissions.map(({ id }) => ({ id })),
+                },
             },
         });
     }
@@ -44,7 +79,11 @@ export class PrismaRoleRepository implements RoleRepository {
     }
 
     async findAll(): Promise<Role[]> {
-        const roles = await this.prisma.role.findMany();
+        const roles = await this.prisma.role.findMany({
+            include: {
+                permissions: true,
+            },
+        });
         return roles.map(RoleMapper.toDomain);
     }
 }

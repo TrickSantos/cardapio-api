@@ -4,19 +4,31 @@ import { InMemoryRoleRepository } from '@infra/database/inMemory/role.repository
 import { makeRole } from '@test/factories/role.factory';
 import { RoleNotFound } from '@useCases/errors/RoleNotFound';
 import { UpdateRoleUseCase } from '.';
+import { InMemoryPermissionRepository } from '@infra/database/inMemory/permission.repository';
+import { Permission } from '@domain/entities/user/permission/permission';
+import { makePermission } from '@test/factories/permission.factory';
 
 describe('Update Role', () => {
     let role: Role;
-    const repository = new InMemoryRoleRepository();
-    const useCase = new UpdateRoleUseCase(repository);
+    let permissions: Permission[];
+    const roleRepository = new InMemoryRoleRepository();
+    const permissionRepository = new InMemoryPermissionRepository();
+    const useCase = new UpdateRoleUseCase(roleRepository, permissionRepository);
 
-    beforeEach(() => {
+    beforeEach(async () => {
         role = makeRole();
-        repository.create(role);
+        permissions = Array.from({ length: 3 }, () => makePermission());
+        await Promise.all(
+            permissions.map((permission) =>
+                permissionRepository.create(permission),
+            ),
+        );
+        roleRepository.create(role);
     });
 
     afterEach(() => {
-        repository.reset();
+        roleRepository.reset();
+        permissionRepository.reset();
     });
 
     it('should update a user', async () => {
@@ -25,11 +37,13 @@ describe('Update Role', () => {
             id: role.id,
             name: updatedRole.name,
             description: updatedRole.description,
+            isActive: updatedRole.isActive,
         });
 
-        const found = await repository.findById(role.id);
+        const found = await roleRepository.findById(role.id);
         expect(found?.description).toBe(updatedRole.description);
         expect(found?.name).toBe(updatedRole.name);
+        expect(found?.isActive).toBe(updatedRole.isActive);
     });
 
     it('should throw an error if role not found', async () => {
