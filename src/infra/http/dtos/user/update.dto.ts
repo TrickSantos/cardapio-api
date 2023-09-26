@@ -7,5 +7,5 @@ export class UpdateUserDto extends createZodDto(
         permissions: true,
         roles: true,
         organizationId: true,
-    }),
+    }).partial(),
 ) {}

@@ -1,9 +1,12 @@
 import { randomUUID } from 'node:crypto';
 import { Replace } from 'src/helpers/replace';
+import { Permission } from '../permission/permission';
+import { User } from '../user';
 
 export type RoleProps = {
     name: string;
     description: string;
+    isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
 };
@@ -11,17 +14,41 @@ export type RoleProps = {
 export class Role {
     private _id: string;
     private props: RoleProps;
+    private _permissions: Map<string, Permission>;
+    private _users: Map<string, User>;
 
     constructor(
-        props: Replace<RoleProps, { createdAt?: Date; updatedAt?: Date }>,
+        props: Replace<
+            RoleProps,
+            {
+                createdAt?: Date;
+                updatedAt?: Date;
+                isActive?: boolean;
+                permissions?: Permission[];
+                users?: User[];
+            }
+        >,
         id?: string,
     ) {
         this._id = id || randomUUID();
         this.props = {
             ...props,
+            isActive: props.isActive || true,
             createdAt: props.createdAt || new Date(),
             updatedAt: props.updatedAt || new Date(),
         };
+        this._permissions = new Map();
+        this._users = new Map();
+
+        if (props.permissions) {
+            props.permissions.forEach((permission) =>
+                this._permissions.set(permission.id, permission),
+            );
+        }
+
+        if (props.users) {
+            props.users.forEach((user) => this._users.set(user.id, user));
+        }
     }
 
     get id(): string {
@@ -36,6 +63,10 @@ export class Role {
         return this.props.description;
     }
 
+    get isActive(): boolean {
+        return this.props.isActive;
+    }
+
     get createdAt(): Date {
         return this.props.createdAt;
     }
@@ -44,15 +75,56 @@ export class Role {
         return this.props.updatedAt;
     }
 
-    public update(props: Partial<RoleProps>): void {
+    get permissions(): Permission[] {
+        return Array.from(this._permissions.values());
+    }
+
+    get users(): User[] {
+        return Array.from(this._users.values());
+    }
+
+    public addPermission(permission: Permission): void {
+        this._permissions.set(permission.id, permission);
+    }
+
+    public removePermission(permission: Permission): void {
+        this._permissions.delete(permission.id);
+    }
+
+    public addUser(user: User): void {
+        this._users.set(user.id, user);
+    }
+
+    public removeUser(user: User): void {
+        this._users.delete(user.id);
+    }
+
+    public update({
+        permissions,
+        ...props
+    }: Partial<RoleProps & { permissions: Permission[] }>): void {
         this.props = {
             ...this.props,
             ...props,
             updatedAt: new Date(),
         };
+        permissions?.forEach((permission) =>
+            this._permissions.set(permission.id, permission),
+        );
     }
 
-    public toJSON(): RoleProps {
-        return this.props;
+    public toJSON() {
+        return {
+            id: this.id,
+            name: this.name,
+            description: this.description,
+            permissions: this.permissions.map((permission) =>
+                permission.toJSON(),
+            ),
+            users: this.users.map((user) => user.toJSON()),
+            isActive: this.isActive,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
+        };
     }
 }
