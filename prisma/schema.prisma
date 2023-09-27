@@ -11,40 +11,56 @@ datasource db {
 }
 
 model Organization {
-  id        String   @id @default(uuid())
-  name      String
-  logo      String
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  users     User[]
-  Place     Place[]
+  id          String             @id @default(uuid())
+  name        String
+  logo        String
+  isActive    Boolean            @default(true)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  users       User[]
+  Place       Place[]
+  permissions Permission[]
+  roles       OrganizationRole[]
 }
 
 model User {
-  id             String       @id @default(uuid())
-  email          String       @unique
+  id             String             @id @default(uuid())
+  email          String             @unique
   password       String
   username       String
-  isActive       Boolean      @default(true)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  organization   Organization @relation(fields: [organizationId], references: [id])
+  isActive       Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  organization   Organization       @relation(fields: [organizationId], references: [id])
   organizationId String
   roles          Role[]
   permissions    Permission[]
   contacts       Contact[]
+  cargos         OrganizationRole[]
 }
 
 model Permission {
-  id          String   @id @default(uuid())
-  name        String
-  description String
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  roles       Role[]
-  users       User[]
+  id                String             @id @default(uuid())
+  name              String
+  description       String
+  isActive          Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  roles             Role[]
+  users             User[]
+  organizations     Organization[]
+  organizationRoles OrganizationRole[]
+}
+
+model OrganizationRole {
+  id             String       @id @default(uuid())
+  organizationId String
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  permissions    Permission[]
+  users          User[]
 }
 
 model Role {
