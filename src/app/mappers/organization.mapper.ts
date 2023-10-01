@@ -1,10 +1,8 @@
 import { Organization } from '@domain/entities/organization/organization';
-import { Prisma, Organization as PrismaOrganization } from '@prisma/client';
+import { Organization as PrismaOrganization } from '@prisma/client';
 
 export class OrganizationMapper {
-    public static toPersistence(
-        organization: Organization,
-    ): Prisma.OrganizationUncheckedCreateInput {
+    public static toPersistence(organization: Organization) {
         return {
             id: organization.id,
             logo: organization.logo,

@@ -1,8 +1,58 @@
 import { PrismaClient } from '@prisma/client';
+import permissions from './seeds/permissions';
+import roles from './seeds/roles';
+import defaultOrganizationRoles from '@helpers/constants/default/organization/roles';
 
 const prisma = new PrismaClient();
 
 async function main() {
+    await prisma.role.createMany({
+        data: roles,
+        skipDuplicates: true,
+    });
+
+    await prisma.permission.createMany({
+        data: permissions,
+        skipDuplicates: true,
+    });
+
+    const permissionsIds = await prisma.permission.findMany({
+        where: {
+            name: {
+                in: permissions.map((permission) => permission.name),
+            },
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    const foundRoles = await prisma.role.findMany({
+        where: {
+            name: {
+                in: roles.map((role) => role.name),
+            },
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    await Promise.all(
+        foundRoles.map((role) => {
+            return prisma.role.update({
+                where: {
+                    id: role.id,
+                },
+                data: {
+                    permissions: {
+                        connect: permissionsIds,
+                    },
+                },
+            });
+        }),
+    );
+
     await prisma.organization.create({
         data: {
             name: 'SySirius',
@@ -69,9 +119,19 @@ async function main() {
                     },
                 },
             },
+            roles: {
+                createMany: {
+                    data: defaultOrganizationRoles,
+                    skipDuplicates: true,
+                },
+            },
+            permissions: {
+                connect: permissionsIds,
+            },
         },
     });
 }
+
 main()
     .then(async () => {
         await prisma.$disconnect();

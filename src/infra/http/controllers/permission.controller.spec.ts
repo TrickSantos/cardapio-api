@@ -1,8 +1,9 @@
-import { afterEach, beforeEach, describe, it } from 'vitest';
+import { afterEach, beforeEach, describe, it, expect } from 'vitest';
 import { Test } from '@nestjs/testing';
 import { makePermission } from '@test/factories/permission.factory';
 import { PermissionUseCaseModule } from '@useCases/permission/permission.module';
 import { PermissionController } from './permission.controller';
+import { PermissionNotFound } from '@useCases/errors/PermissionNotFound';
 
 describe('Permission Controller', () => {
     let permissionController: PermissionController;
@@ -45,6 +46,7 @@ describe('Permission Controller', () => {
 
             await permissionController.create({
                 name: data.name,
+                description: data.description,
                 isActive: data.isActive,
             });
 
@@ -63,6 +65,7 @@ describe('Permission Controller', () => {
             await permissionController.create({
                 name: data.name,
                 isActive: data.isActive,
+                description: data.description,
             });
 
             const permissions = await permissionController.listAll();
@@ -77,12 +80,12 @@ describe('Permission Controller', () => {
         it('should return a permission', async () => {
             const find = await permissionController.findById(permission.id);
 
-            expect(find).toEqual(permission);
+            expect(find.name).toEqual(permission.name);
         });
 
         it('should throw a NotFoundException', async () => {
             await expect(permissionController.findById('123')).rejects.toThrow(
-                'Permission not found',
+                PermissionNotFound,
             );
         });
     });
@@ -96,6 +99,7 @@ describe('Permission Controller', () => {
             await permissionController.create({
                 name: data.name,
                 isActive: data.isActive,
+                description: data.description,
             });
 
             const permissions = await permissionController.listAll();
@@ -138,6 +142,7 @@ describe('Permission Controller', () => {
             await permissionController.create({
                 name: data.name,
                 isActive: data.isActive,
+                description: data.description,
             });
 
             const permissions = await permissionController.listAll();

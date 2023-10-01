@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, it } from 'vitest';
+import { afterEach, beforeEach, describe, it, expect } from 'vitest';
 import { Test } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UserUseCaseModule } from '@useCases/user/user.module';

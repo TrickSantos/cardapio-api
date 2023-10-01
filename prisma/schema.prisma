@@ -54,6 +54,8 @@ model Permission {
 
 model OrganizationRole {
   id             String       @id @default(uuid())
+  name           String
+  description    String
   organizationId String
   isActive       Boolean      @default(true)
   createdAt      DateTime     @default(now())
