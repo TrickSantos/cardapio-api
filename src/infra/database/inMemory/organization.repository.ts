@@ -121,10 +121,6 @@ export class InMemoryOrganizationRepository implements OrganizationRepository {
         this._users.set(organizationId, usersMap);
     }
 
-    get roles(): Role[] {
-        return Array.from(this._roles.values());
-    }
-
     set roles({
         organizationId,
         roles,
