@@ -4,11 +4,13 @@ import { InMemoryUserRepository } from '@infra/database/inMemory/user.repository
 import { makeUser } from '@test/factories/user.factory';
 import { CreateUserUseCase } from '.';
 import { makeContact } from '@test/factories/contact.factory';
+import { InMemoryOrganizationRepository } from '@infra/database/inMemory/organization.repository';
 
 describe('Create User', () => {
     let user: User;
     const repository = new InMemoryUserRepository();
-    const useCase = new CreateUserUseCase(repository);
+    const orgRepository = new InMemoryOrganizationRepository();
+    const useCase = new CreateUserUseCase(repository, orgRepository);
 
     afterEach(() => {
         repository.reset();
@@ -34,6 +36,7 @@ describe('Create User', () => {
             password: user.password,
             isActive: user.isActive,
             organizationId: user.organizationId,
+            roles: [],
         });
         const users = await repository.findAll();
         expect(users).toHaveLength(1);

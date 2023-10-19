@@ -6,6 +6,7 @@ import {
     Param,
     Post,
     Put,
+    Query,
 } from '@nestjs/common';
 import { CreateUserUseCase } from '@useCases/user/create';
 import { DeleteUserUseCase } from '@useCases/user/delete';
@@ -14,6 +15,7 @@ import { ListAllUsersUseCase } from '@useCases/user/listAll';
 import { UpdateUserUseCase } from '@useCases/user/update';
 import { CreateUserDTO } from '../dtos/user/create.dto';
 import { UpdateUserDto } from '../dtos/user/update.dto';
+import { listAllUsersDTO } from '../dtos/user/listAll.dto';
 
 @Controller('users')
 export class UsersController {
@@ -26,8 +28,8 @@ export class UsersController {
     ) {}
 
     @Get()
-    async listAll() {
-        const users = await this.listAllUsers.execute();
+    async listAll(@Query() query: listAllUsersDTO) {
+        const users = await this.listAllUsers.execute(query);
         return users.map((user) => {
             return {
                 ...user.toJSON(),

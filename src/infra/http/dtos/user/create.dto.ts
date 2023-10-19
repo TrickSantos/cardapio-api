@@ -7,7 +7,7 @@ export const CreateUserSchema = z.object({
     password: z.string({ required_error: 'Password is required' }),
     email: z.string({ required_error: 'Email is required' }),
     isActive: z.boolean().default(true),
-    permissions: z.array(z.string()),
+    permissions: z.array(z.string()).optional(),
     roles: z.array(z.string()),
     contact: z.object({
         firstName: z.string(),

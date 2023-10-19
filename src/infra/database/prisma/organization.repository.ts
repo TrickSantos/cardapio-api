@@ -5,7 +5,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { Place } from '@domain/entities/place/place';
 import { PlaceMapper } from '@mappers/place.mapper';
-import { Role } from '@domain/entities/organization/role/role';
+import { Role as OrgRole } from '@domain/entities/organization/role/role';
+import { Role } from '@domain/entities/user/role/role';
 import { Permission } from '@domain/entities/user/permission/permission';
 import { OrganizationRoleMapper } from '@mappers/organizationRole.mapper';
 import { PermissionMapper } from '@mappers/permission.mapper';
@@ -161,6 +162,22 @@ export class PrismaOrganizationRepository implements OrganizationRepository {
         return roles.map(OrganizationRoleMapper.toDomain);
     }
 
+    async findRoleById(id: string): Promise<Role | null> {
+        const role = await this.prisma.organizationRole.findUnique({
+            where: {
+                id,
+            },
+            include: {
+                permissions: true,
+                users: true,
+            },
+        });
+
+        if (!role) return null;
+
+        return OrganizationRoleMapper.toDomain(role);
+    }
+
     async findPermissions(id: string): Promise<Permission[]> {
         const permissions = await this.prisma.permission.findMany({
             where: {
@@ -176,7 +193,7 @@ export class PrismaOrganizationRepository implements OrganizationRepository {
         return permissions.map(PermissionMapper.toDomain);
     }
 
-    async createRole(role: Role): Promise<void> {
+    async createRole(role: OrgRole): Promise<void> {
         const data = OrganizationRoleMapper.toPersistence(role);
 
         await this.prisma.organizationRole.create({
