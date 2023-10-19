@@ -2,6 +2,10 @@ import { UserRepository } from '@domain/repositories/user.repository';
 import { Injectable } from '@nestjs/common';
 import { User } from '@domain/entities/user/user';
 import { Contact } from '@domain/entities/user/contact/contact';
+import { RoleRepository } from '@domain/repositories/role.repository';
+
+import { OrganizationRepository } from '@domain/repositories/organization.repository';
+import { Role } from '@domain/entities/user/role/role';
 
 type CreateUserDTO = {
     organizationId: string;
@@ -10,7 +14,7 @@ type CreateUserDTO = {
     email: string;
     isActive: boolean;
     permissions?: string[];
-    roles?: string[];
+    roles: string[];
     contact: {
         firstName: string;
         lastName: string;
@@ -21,16 +25,27 @@ type CreateUserDTO = {
 
 @Injectable()
 export class CreateUserUseCase {
-    constructor(private userRepository: UserRepository) {}
+    constructor(
+        private userRepository: UserRepository,
+        private roleRepository: OrganizationRepository,
+    ) {}
 
-    async execute(data: CreateUserDTO): Promise<void> {
+    async execute({ roles, ...data }: CreateUserDTO): Promise<void> {
+        const requests = roles.map((id) =>
+            this.roleRepository.findRoleById(id),
+        );
+
+        const results = await Promise.all(requests);
+
+        const cargos = results.filter((role) => role !== null) as Role[];
+
         const user = new User({
             organizationId: data.organizationId,
             username: data.username,
             email: data.email,
             isActive: true,
             permissions: [],
-            roles: [],
+            roles: cargos,
             password: data.password,
         });
 

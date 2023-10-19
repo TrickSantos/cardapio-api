@@ -1,4 +1,5 @@
-import { Role } from '@domain/entities/organization/role/role';
+import { Role as OrgRole } from '@domain/entities/organization/role/role';
+import { Role } from '@domain/entities/user/role/role';
 import {
     OrganizationRole as PrismaRole,
     Permission,
@@ -13,7 +14,7 @@ type OrganizationRolePersistence = PrismaRole & {
 };
 
 export class OrganizationRoleMapper {
-    static toPersistence(role: Role) {
+    static toPersistence(role: OrgRole) {
         return {
             id: role.id,
             name: role.name,
@@ -41,7 +42,6 @@ export class OrganizationRoleMapper {
             {
                 name: role.name,
                 description: role.description,
-                organizationId: role.organizationId,
                 isActive: role.isActive,
                 createdAt: role.createdAt,
                 updatedAt: role.updatedAt,

@@ -1,8 +1,14 @@
 import { User } from '@domain/entities/user/user';
-import { Prisma, User as PrismaUser } from '@prisma/client';
+import { User as PrismaUser, Contact, Role } from '@prisma/client';
+import { ContactMapper } from './contact.mapper';
+import { RoleMapper } from './role.mapper';
 
+type UserPersistence = PrismaUser & {
+    contacts?: Contact[];
+    cargos?: Role[];
+};
 export class UserMapper {
-    static toPersistence(user: User): Prisma.UserUncheckedCreateInput {
+    static toPersistence(user: User) {
         return {
             id: user.id,
             organizationId: user.organizationId,
@@ -12,10 +18,21 @@ export class UserMapper {
             isActive: user.isActive,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
+            ...(user.roles && {
+                roles: user.roles.map(RoleMapper.toPersistence),
+            }),
+            ...(user.contact && {
+                contact: ContactMapper.toPersistence(user.contact),
+            }),
         };
     }
 
-    static toDomain(user: PrismaUser): User {
+    static toDomain(user: UserPersistence): User {
+        const roles = user.cargos?.map(RoleMapper.toDomain);
+        const contact = user.contacts
+            ? ContactMapper.toDomain(user.contacts[0])
+            : undefined;
+
         return new User(
             {
                 organizationId: user.organizationId,
@@ -25,6 +42,8 @@ export class UserMapper {
                 isActive: user.isActive,
                 createdAt: user.createdAt,
                 updatedAt: user.updatedAt,
+                contact,
+                roles,
             },
             user.id,
         );

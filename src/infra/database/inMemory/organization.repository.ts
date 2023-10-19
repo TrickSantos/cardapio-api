@@ -1,7 +1,9 @@
 import { Organization } from '@domain/entities/organization/organization';
-import { Role } from '@domain/entities/organization/role/role';
+
 import { Place } from '@domain/entities/place/place';
 import { Permission } from '@domain/entities/user/permission/permission';
+import { Role } from '@domain/entities/user/role/role';
+import { Role as OrgRole } from '@domain/entities/organization/role/role';
 import { User } from '@domain/entities/user/user';
 import { OrganizationRepository } from '@domain/repositories/organization.repository';
 
@@ -59,6 +61,16 @@ export class InMemoryOrganizationRepository implements OrganizationRepository {
         return [];
     }
 
+    findRoleById(id: string): Promise<Role | null> {
+        const role = this._roles.get(id);
+
+        if (role) {
+            return Promise.resolve(role);
+        }
+
+        return Promise.resolve(null);
+    }
+
     async findPermissions(id: string): Promise<Permission[]> {
         const permissions = this._permissions.get(id);
 
@@ -69,12 +81,24 @@ export class InMemoryOrganizationRepository implements OrganizationRepository {
         return [];
     }
 
-    async createRole(role: Role): Promise<void> {
+    async createRole(role: OrgRole): Promise<void> {
         const roleMap =
             this._organizationsRoles.get(role.organizationId) || new Map();
         roleMap.set(role.id, role);
+        const nRole = new Role(
+            {
+                description: role.description,
+                name: role.name,
+                createdAt: role.createdAt,
+                isActive: role.isActive,
+                permissions: role.permissions,
+                updatedAt: role.updatedAt,
+                users: role.users,
+            },
+            role.id,
+        );
         this._organizationsRoles.set(role.organizationId, roleMap);
-        this._roles.set(role.id, role);
+        this._roles.set(role.id, nRole);
     }
 
     async deleteRole(id: string): Promise<void> {

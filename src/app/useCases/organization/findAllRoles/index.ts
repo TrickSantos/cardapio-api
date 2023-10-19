@@ -1,4 +1,4 @@
-import { Role } from '@domain/entities/organization/role/role';
+import { Role } from '@domain/entities/user/role/role';
 import { OrganizationRepository } from '@domain/repositories/organization.repository';
 import { Injectable } from '@nestjs/common';
 import { OrganizationNotFound } from '@useCases/errors/OrganizationNotFound';
