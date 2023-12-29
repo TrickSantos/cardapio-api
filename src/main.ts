@@ -13,7 +13,7 @@ async function bootstrap() {
         new FastifyAdapter(),
     );
 
-    app.register(multipart, { addToBody: true });
+    // app.register(multipart, { addToBody: true });
 
     app.enableCors({
         origin: '*',
