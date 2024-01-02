@@ -2,7 +2,7 @@ import { Role } from '@domain/entities/user/role/role';
 import { User } from '@domain/entities/user/user';
 import { InMemoryRoleRepository } from '@infra/database/inMemory/role.repository';
 import { InMemoryUserRepository } from '@infra/database/inMemory/user.repository';
-import { afterEach, beforeEach, describe } from 'vitest';
+import { afterAll, beforeAll, describe, it } from 'vitest';
 import { AddUsersToRoleUseCase } from '.';
 import { makeRole } from '@test/factories/role.factory';
 import { makeUser } from '@test/factories/user.factory';
@@ -15,9 +15,11 @@ describe('addUsers', () => {
     const userRepository = new InMemoryUserRepository();
     const useCase = new AddUsersToRoleUseCase(roleRepository, userRepository);
 
-    beforeEach(async () => {
+    beforeAll(async () => {
         role = makeRole();
-        users = Array.from({ length: 3 }, () => makeUser());
+        users = await Promise.all(
+            Array.from({ length: 3 }, async () => await makeUser()),
+        );
 
         await Promise.all(users.map((user) => userRepository.create(user)));
 
@@ -26,7 +28,7 @@ describe('addUsers', () => {
         roleRepository.users = users;
     });
 
-    afterEach(() => {
+    afterAll(() => {
         roleRepository.reset();
         userRepository.reset();
     });

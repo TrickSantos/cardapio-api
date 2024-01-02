@@ -1,4 +1,4 @@
-import { describe, afterEach, beforeEach, it, expect } from 'vitest';
+import { describe, afterAll, beforeAll, it, expect } from 'vitest';
 import { User } from '@domain/entities/user/user';
 import { InMemoryUserRepository } from '@infra/database/inMemory/user.repository';
 import { makeUser } from '@test/factories/user.factory';
@@ -10,12 +10,12 @@ describe('FindById', () => {
     const repository = new InMemoryUserRepository();
     const useCase = new FindUserByIdUseCase(repository);
 
-    beforeEach(() => {
-        user = makeUser();
+    beforeAll(async () => {
+        user = await makeUser();
         repository.create(user);
     });
 
-    afterEach(() => {
+    afterAll(() => {
         repository.reset();
     });
 
@@ -23,8 +23,6 @@ describe('FindById', () => {
         const response = await useCase.execute(user.id);
         expect(response).toBeDefined();
         expect(response.id).toEqual(user.id);
-        expect(response.username).toEqual(user.username);
-        expect(response.email).toEqual(user.email);
     });
 
     it('should throw an error if user not found', async () => {

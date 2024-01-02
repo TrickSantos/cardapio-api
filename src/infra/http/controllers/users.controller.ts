@@ -28,8 +28,9 @@ export class UsersController {
     ) {}
 
     @Get()
-    async listAll(@Query() query: listAllUsersDTO) {
+    async listAll(@Query() query?: listAllUsersDTO) {
         const users = await this.listAllUsers.execute(query);
+
         return users.map((user) => {
             return {
                 ...user.toJSON(),

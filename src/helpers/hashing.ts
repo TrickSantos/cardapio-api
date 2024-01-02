@@ -9,7 +9,8 @@ export class Hashing {
 
     async hash(password: string): Promise<string> {
         const salt = await bcrypt.genSalt(this.#saltRounds);
-        return await bcrypt.hash(password, salt);
+        const hash = await bcrypt.hash(password, salt);
+        return hash;
     }
 
     async compare(password: string, hash: string): Promise<boolean> {

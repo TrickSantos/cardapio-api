@@ -1,20 +1,19 @@
-import { Place } from '@domain/entities/place/place';
 import { InMemoryPlaceRepository } from '@infra/database/inMemory/place.repository';
 import { makePlace } from '@test/factories/place.factory';
 import { PlaceNotFound } from '@useCases/errors/PlaceNotFound';
 import { DeletePlaceUseCase } from '.';
+import { afterAll, describe, it } from 'vitest';
 
 describe('Delete Place', () => {
-    let place: Place;
+    const place = makePlace();
     const repository = new InMemoryPlaceRepository();
     const useCase = new DeletePlaceUseCase(repository);
 
-    afterEach(() => {
+    afterAll(() => {
         repository.reset();
     });
 
     it('should delete a place', async () => {
-        place = makePlace();
         await repository.create(place);
         await useCase.execute(place.id);
         const places = await repository.findAll();

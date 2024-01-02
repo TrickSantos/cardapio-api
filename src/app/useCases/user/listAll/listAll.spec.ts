@@ -1,4 +1,4 @@
-import { describe, afterEach, beforeEach, it, expect } from 'vitest';
+import { describe, it, expect, afterAll, beforeAll } from 'vitest';
 import { User } from '@domain/entities/user/user';
 import { InMemoryUserRepository } from '@infra/database/inMemory/user.repository';
 import { makeUser } from '@test/factories/user.factory';
@@ -9,19 +9,26 @@ describe('List All Users', () => {
     const repository = new InMemoryUserRepository();
     const useCase = new ListAllUsersUseCase(repository);
 
-    beforeEach(() => {
-        Array.from({ length: 10 }).forEach(() => {
-            user = makeUser();
+    beforeAll(async () => {
+        for (let index = 0; index < 10; index++) {
+            user = await makeUser();
             repository.create(user);
-        });
+        }
     });
 
-    afterEach(() => {
+    afterAll(() => {
         repository.reset();
     });
 
     it('should list all users', async () => {
-        const response = await useCase.execute();
-        expect(response).toHaveLength(10);
+        const users = await useCase.execute();
+
+        expect(users).toHaveLength(10);
+    });
+
+    it('should list all users with pagination', async () => {
+        const users = await useCase.execute({ limit: 5, offset: 5 });
+
+        expect(users).toHaveLength(5);
     });
 });

@@ -1,20 +1,39 @@
-import { afterEach, beforeEach, describe, it, expect } from 'vitest';
+import { beforeAll, describe, it, expect, vi } from 'vitest';
 import { Test } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UserUseCaseModule } from '@useCases/user/user.module';
 import { makeUser } from '@test/factories/user.factory';
 import { makeContact } from '@test/factories/contact.factory';
+import { ListAllUsersUseCase } from '@useCases/user/listAll';
+import { CreateUserUseCase } from '@useCases/user/create';
+import { DeleteUserUseCase } from '@useCases/user/delete';
+import { FindUserByIdUseCase } from '@useCases/user/findById';
+import { UpdateUserUseCase } from '@useCases/user/update';
+import { User } from '@domain/entities/user/user';
+import { UserNotFound } from '@useCases/errors/UserNotFound';
 
 describe('UsersController', () => {
+    let user: User;
     let userController: UsersController;
+    let createUser: CreateUserUseCase,
+        listAllUsers: ListAllUsersUseCase,
+        findUserById: FindUserByIdUseCase,
+        updateUser: UpdateUserUseCase,
+        deleteUser: DeleteUserUseCase;
 
-    beforeEach(async () => {
+    beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             controllers: [UsersController],
             imports: [UserUseCaseModule],
         }).compile();
 
+        user = await makeUser();
         userController = moduleRef.get<UsersController>(UsersController);
+        createUser = moduleRef.get<CreateUserUseCase>(CreateUserUseCase);
+        listAllUsers = moduleRef.get<ListAllUsersUseCase>(ListAllUsersUseCase);
+        findUserById = moduleRef.get<FindUserByIdUseCase>(FindUserByIdUseCase);
+        updateUser = moduleRef.get<UpdateUserUseCase>(UpdateUserUseCase);
+        deleteUser = moduleRef.get<DeleteUserUseCase>(DeleteUserUseCase);
     });
 
     describe('defined', () => {
@@ -24,34 +43,51 @@ describe('UsersController', () => {
     });
 
     describe('listAll', () => {
-        it('should return an array of users', async () => {
-            const users = await userController.listAll();
+        it('should call listAll without params', async () => {
+            const mock = vi.fn().mockImplementation(() => Promise.resolve([]));
+            const spy = vi.spyOn(listAllUsers, 'execute');
+            spy.mockImplementation(mock);
 
-            expect(users).toEqual([]);
+            await userController.listAll();
+
+            expect(spy).toHaveBeenCalled();
+        });
+
+        it('should call listAll with params', async () => {
+            const mock = vi.fn().mockImplementation(() => Promise.resolve([]));
+            const spy = vi.spyOn(listAllUsers, 'execute');
+            spy.mockImplementation(mock);
+
+            await userController.listAll({
+                limit: 10,
+                offset: 0,
+            });
+
+            expect(spy).toHaveBeenCalledWith({
+                limit: 10,
+                offset: 0,
+            });
         });
     });
 
     describe('create', () => {
-        afterEach(async () => {
-            const users = await userController.listAll();
+        it('should be called without roles', async () => {
+            const spy = vi.spyOn(createUser, 'execute');
+            spy.mockImplementation(async () => Promise.resolve());
 
-            for (const user of users) {
-                await userController.delete(user.id);
-            }
-        });
-
-        it('should create a user', async () => {
-            const data = makeUser();
-            const dataContact = makeContact();
+            const data = await makeUser();
+            const contact = makeContact({
+                userId: data.id,
+            });
 
             await userController.create({
                 username: data.username,
                 email: data.email,
                 contact: {
-                    email: dataContact.email,
-                    firstName: dataContact.firstName,
-                    lastName: dataContact.lastName,
-                    phone: dataContact.phone,
+                    email: contact.email,
+                    firstName: contact.firstName,
+                    lastName: contact.lastName,
+                    phone: contact.phone,
                 },
                 isActive: data.isActive,
                 organizationId: data.organizationId,
@@ -60,153 +96,99 @@ describe('UsersController', () => {
                 roles: [],
             });
 
-            const users = await userController.listAll();
-
-            expect(users).toHaveLength(1);
+            expect(spy).toHaveBeenCalledWith({
+                username: data.username,
+                email: data.email,
+                contact: {
+                    email: contact.email,
+                    firstName: contact.firstName,
+                    lastName: contact.lastName,
+                    phone: contact.phone,
+                },
+                isActive: data.isActive,
+                organizationId: data.organizationId,
+                password: data.password,
+                permissions: [],
+                roles: [],
+            });
         });
     });
 
     describe('findById', () => {
-        let user: any;
-
-        beforeEach(async () => {
-            const data = makeUser();
-            const dataContact = makeContact();
-
-            await userController.create({
-                username: data.username,
-                email: data.email,
-                contact: {
-                    email: dataContact.email,
-                    firstName: dataContact.firstName,
-                    lastName: dataContact.lastName,
-                    phone: dataContact.phone,
-                },
-                isActive: data.isActive,
-                organizationId: data.organizationId,
-                password: data.password,
-                permissions: [],
-                roles: [],
-            });
-
-            const users = await userController.listAll();
-
-            user = users[0];
-        });
-
-        afterEach(async () => {
-            await userController.delete(user.id);
-        });
-
         it('should return a user', async () => {
-            const find = await userController.findById(user.id);
+            const spy = vi.spyOn(findUserById, 'execute');
+            spy.mockImplementation(async () => Promise.resolve(user));
 
-            expect(find).toEqual(user);
+            const data = await userController.findById(user.id);
+
+            expect(data).toEqual(user.toJSON());
         });
 
         it('should throw a NotFoundException', async () => {
-            await expect(userController.findById('123')).rejects.toThrow(
-                'User not found',
+            const spy = vi.spyOn(findUserById, 'execute');
+            spy.mockImplementation(async () => {
+                throw new UserNotFound();
+            });
+
+            await expect(userController.findById(user.id)).rejects.toThrow(
+                UserNotFound,
             );
         });
     });
 
     describe('update', () => {
-        let user: any;
+        it('should be called with a body', async () => {
+            const spy = vi.spyOn(updateUser, 'execute');
+            spy.mockImplementation(async () => Promise.resolve());
 
-        beforeEach(async () => {
-            const data = makeUser();
-            const dataContact = makeContact();
-
-            await userController.create({
-                username: data.username,
-                email: data.email,
-                contact: {
-                    email: dataContact.email,
-                    firstName: dataContact.firstName,
-                    lastName: dataContact.lastName,
-                    phone: dataContact.phone,
-                },
-                isActive: data.isActive,
-                organizationId: data.organizationId,
-                password: data.password,
-                permissions: [],
-                roles: [],
-            });
-
-            const users = await userController.listAll();
-
-            user = users[0];
-        });
-
-        afterEach(async () => {
-            await userController.delete(user.id);
-        });
-
-        it('should update a user', async () => {
             await userController.update(user.id, {
                 email: 'new email',
                 username: 'new username',
                 isActive: false,
             });
 
-            const find = await userController.findById(user.id);
-
-            expect(find.email).toEqual('new email');
-            expect(find.username).toEqual('new username');
-            expect(find.isActive).toEqual(false);
+            expect(spy).toHaveBeenCalledWith({
+                id: user.id,
+                email: 'new email',
+                username: 'new username',
+                isActive: false,
+            });
         });
 
         it('should throw a NotFoundException', async () => {
+            const spy = vi.spyOn(updateUser, 'execute');
+            spy.mockImplementation(async () => {
+                throw new UserNotFound();
+            });
+
             await expect(
-                userController.update('123', {
+                userController.update(user.id, {
                     email: 'new email',
                     username: 'new username',
                     isActive: false,
                 }),
-            ).rejects.toThrow('User not found');
+            ).rejects.toThrow(UserNotFound);
         });
     });
 
     describe('delete', () => {
-        let user: any;
+        it('should be called with a id', async () => {
+            const spy = vi.spyOn(deleteUser, 'execute');
+            spy.mockImplementation(async () => Promise.resolve());
 
-        beforeEach(async () => {
-            const data = makeUser();
-            const dataContact = makeContact();
-
-            await userController.create({
-                username: data.username,
-                email: data.email,
-                contact: {
-                    email: dataContact.email,
-                    firstName: dataContact.firstName,
-                    lastName: dataContact.lastName,
-                    phone: dataContact.phone,
-                },
-                isActive: data.isActive,
-                organizationId: data.organizationId,
-                password: data.password,
-                permissions: [],
-                roles: [],
-            });
-
-            const users = await userController.listAll();
-
-            user = users[0];
-        });
-
-        it('should delete a user', async () => {
             await userController.delete(user.id);
 
-            const users = await userController.listAll();
-
-            expect(users).toHaveLength(0);
+            expect(spy).toHaveBeenCalledWith(user.id);
         });
 
         it('should throw a NotFoundException', async () => {
-            await expect(userController.delete('123')).rejects.toThrow(
-                'User not found',
+            const spy = vi.spyOn(deleteUser, 'execute');
+            spy.mockImplementation(async () => {
+                throw new UserNotFound();
+            });
+
+            await expect(userController.delete(user.id)).rejects.toThrow(
+                UserNotFound,
             );
         });
     });

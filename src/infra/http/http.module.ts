@@ -20,9 +20,12 @@ import { RoleController } from './controllers/role.controller';
 import { RoleUseCaseModule } from '@useCases/role/role.module';
 import { PermissionUseCaseModule } from '@useCases/permission/permission.module';
 import { PermissionController } from './controllers/permission.controller';
+import { AuthenticationController } from './controllers/authentication.controller';
+import { AuthModule } from '@useCases/authentication/authentication.module';
 
 @Module({
     controllers: [
+        AuthenticationController,
         OrganizationsController,
         UsersController,
         PlacesController,
@@ -35,6 +38,7 @@ import { PermissionController } from './controllers/permission.controller';
         PermissionController,
     ],
     imports: [
+        AuthModule,
         OrganizationUseCaseModule,
         UserUseCaseModule,
         PlaceUseCaseModule,

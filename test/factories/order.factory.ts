@@ -10,7 +10,7 @@ export function makeOrder(props: Override = {}): Order {
         placeId: faker.datatype.uuid(),
         tableId: faker.datatype.uuid(),
         customerId: faker.datatype.uuid(),
-        customer: makeUser(),
+        customer: await makeUser(),
         combos: [],
         orderNumber: faker.datatype.number(),
         table: makeTable(),

@@ -6,6 +6,12 @@ export default defineConfig({
     test: {
         globals: true,
         root: './',
+        isolate: false,
+        poolOptions: {
+            forks: {
+                isolate: false,
+            },
+        },
     },
     plugins: [
         swc.vite({

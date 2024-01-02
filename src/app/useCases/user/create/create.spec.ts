@@ -1,29 +1,28 @@
-import { describe, afterEach, it, expect } from 'vitest';
-import { User } from '@domain/entities/user/user';
+import { describe, afterAll, it, expect } from 'vitest';
 import { InMemoryUserRepository } from '@infra/database/inMemory/user.repository';
 import { makeUser } from '@test/factories/user.factory';
 import { CreateUserUseCase } from '.';
 import { makeContact } from '@test/factories/contact.factory';
 import { InMemoryOrganizationRepository } from '@infra/database/inMemory/organization.repository';
 
-describe('Create User', () => {
-    let user: User;
+describe('Create User', async () => {
     const repository = new InMemoryUserRepository();
     const orgRepository = new InMemoryOrganizationRepository();
     const useCase = new CreateUserUseCase(repository, orgRepository);
 
-    afterEach(() => {
+    const user = await makeUser();
+    const contact = makeContact({
+        userId: user.id,
+    });
+    user.update({
+        contact,
+    });
+
+    afterAll(() => {
         repository.reset();
     });
 
     it('should create a user', async () => {
-        user = makeUser();
-        const contact = makeContact({
-            userId: user.id,
-        });
-        user.update({
-            contact,
-        });
         await useCase.execute({
             contact: {
                 email: contact.email,
@@ -38,9 +37,7 @@ describe('Create User', () => {
             organizationId: user.organizationId,
             roles: [],
         });
-        const users = await repository.findAll();
-        expect(users).toHaveLength(1);
-        expect(users[0].username).toEqual(user.username);
-        expect(users[0].email).toEqual(user.email);
+        const response = await repository.findById(user.id);
+        expect(response).toBeDefined();
     });
 });

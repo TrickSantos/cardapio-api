@@ -33,11 +33,12 @@ describe('Role', () => {
         expect(role.permissions).toHaveLength(1);
     });
 
-    it('should create a role with user', () => {
+    it('should create a role with user', async () => {
+        const user = await makeUser();
         const role = new Role({
             name: 'name',
             description: 'description',
-            users: [makeUser()],
+            users: [user],
         });
 
         expect(role).toBeDefined();
