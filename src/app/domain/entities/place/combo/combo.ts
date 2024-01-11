@@ -1,12 +1,13 @@
 import { randomUUID } from 'node:crypto';
 import { Replace } from '@helpers/replace';
 import { Product } from '../product/product';
+import { Price } from '../price/price';
 
 export type ComboProps = {
     placeId: string;
     name: string;
     description: string;
-    price: number;
+    price: Price;
     isActive: boolean;
     products: Product[];
     createdAt: Date;
@@ -49,7 +50,7 @@ export class Combo {
         return this.props.description;
     }
 
-    get price(): number {
+    get price(): Price {
         return this.props.price;
     }
 
@@ -67,5 +68,27 @@ export class Combo {
 
     get updatedAt(): Date {
         return this.props.updatedAt;
+    }
+
+    public update(props: Partial<ComboProps>): void {
+        this.props = {
+            ...this.props,
+            ...props,
+            updatedAt: new Date(),
+        };
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            placeId: this.placeId,
+            name: this.name,
+            description: this.description,
+            price: this.price.toJSON(),
+            products: this.products.map((product) => product.toJSON()),
+            isActive: this.isActive,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
+        };
     }
 }

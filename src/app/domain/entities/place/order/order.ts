@@ -1,9 +1,8 @@
 import { User } from '@domain/entities/user/user';
 import { Replace } from '@helpers/replace';
 import { randomUUID } from 'node:crypto';
-import { Combo } from '../combo/combo';
-import { Product } from '../product/product';
 import { Table } from '../table/table';
+import { Item } from './item/item';
 
 type OrderStatus =
     | 'pending'
@@ -18,8 +17,7 @@ export type OrderProps = {
     orderNumber: number;
     table?: Table;
     tableId: string;
-    items: Product[];
-    combos: Combo[];
+    items: Item[];
     customer?: User;
     customerId: string;
     status: OrderStatus;
@@ -72,12 +70,8 @@ export class Order {
         return this.props.table;
     }
 
-    get items(): Product[] {
+    get items(): Item[] {
         return this.props.items;
-    }
-
-    get combos(): Combo[] {
-        return this.props.combos;
     }
 
     get customerId(): string {
@@ -100,6 +94,13 @@ export class Order {
         return this.props.updatedAt;
     }
 
+    get total(): number {
+        return this.items.reduce(
+            (acc, item) => acc + (item.item.price?.value ?? 0),
+            0,
+        );
+    }
+
     public update(props: Partial<OrderProps>): void {
         this.props = {
             ...this.props,
@@ -115,14 +116,14 @@ export class Order {
             orderNumber: this.orderNumber,
             status: this.status,
             tableId: this.tableId,
-            table: this.table,
-            items: this.items,
-            combos: this.combos,
-            customer: this.customer,
+            table: this.table?.toJSON(),
+            items: this.items.map((item) => item.toJSON()),
+            customer: this.customer?.toJSON(),
             customerId: this.customerId,
             isActive: this.isActive,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
+            total: this.total,
         };
     }
 }

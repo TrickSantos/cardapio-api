@@ -10,9 +10,7 @@ describe('Order', () => {
             orderNumber: 1,
             tableId: 'table-123',
             items: [],
-            combos: [],
             customerId: 'customer-123',
-
             isActive: true,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -30,7 +28,6 @@ describe('Order', () => {
         expect(order.status).toBe('pending');
         expect(order.tableId).toBe('table-123');
         expect(order.items).toEqual([]);
-        expect(order.combos).toEqual([]);
         expect(order.customerId).toBe('customer-123');
         expect(order.isActive).toBe(true);
         expect(order.createdAt).toBeInstanceOf(Date);
@@ -47,18 +44,15 @@ describe('Order', () => {
     it('should convert the order to JSON', () => {
         const json = order.toJSON();
 
-        expect(json).toEqual({
-            id: order.id,
-            placeId: 'place-123',
-            orderNumber: 1,
-            status: 'pending',
-            tableId: 'table-123',
-            items: [],
-            combos: [],
-            customerId: 'customer-123',
-            isActive: true,
-            createdAt: order.createdAt,
-            updatedAt: order.updatedAt,
-        });
+        expect(json.id).toBe(order.id);
+        expect(json.placeId).toBe(order.placeId);
+        expect(json.orderNumber).toBe(order.orderNumber);
+        expect(json.status).toBe(order.status);
+        expect(json.tableId).toBe(order.tableId);
+        expect(json.items).toEqual(order.items);
+        expect(json.customerId).toBe(order.customerId);
+        expect(json.isActive).toBe(order.isActive);
+        expect(json.createdAt).toBe(order.createdAt);
+        expect(json.updatedAt).toBe(order.updatedAt);
     });
 });

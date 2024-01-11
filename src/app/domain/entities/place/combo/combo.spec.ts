@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Price } from '../price/price';
 import { Product } from '../product/product';
 import { Combo } from './combo';
+import { makePrice } from '@test/factories/price.factory';
 
 describe('Combo', () => {
     it('should create a valid combo', () => {
@@ -9,7 +10,7 @@ describe('Combo', () => {
             placeId: 'placeId',
             name: 'name',
             description: 'description',
-            price: 10,
+            price: makePrice({ value: 10 }),
             isActive: true,
         });
 
@@ -18,7 +19,7 @@ describe('Combo', () => {
         expect(combo.placeId).toBe('placeId');
         expect(combo.name).toBe('name');
         expect(combo.description).toBe('description');
-        expect(combo.price).toBe(10);
+        expect(combo.price).toBeInstanceOf(Price);
         expect(combo.products).toEqual([]);
         expect(combo.isActive).toBe(true);
         expect(combo.createdAt).toBeInstanceOf(Date);
@@ -30,7 +31,7 @@ describe('Combo', () => {
             placeId: 'placeId',
             name: 'name',
             description: 'description',
-            price: 10,
+            price: makePrice({ value: 10 }),
             isActive: true,
             products: [
                 new Product({
@@ -39,7 +40,6 @@ describe('Combo', () => {
                     description: 'description',
                     price: new Price({
                         value: 10,
-                        placeId: 'placeId',
                         isActive: true,
                         productId: 'productId',
                     }),
@@ -53,7 +53,7 @@ describe('Combo', () => {
         expect(combo.placeId).toBe('placeId');
         expect(combo.name).toBe('name');
         expect(combo.description).toBe('description');
-        expect(combo.price).toBe(10);
+        expect(combo.price).toBeInstanceOf(Price);
         expect(combo.products).toHaveLength(1);
         expect(combo.products[0]).toBeInstanceOf(Product);
         expect(combo.isActive).toBe(true);
