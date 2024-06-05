@@ -11,6 +11,7 @@ import { FindUserByIdUseCase } from '@useCases/user/findById';
 import { UpdateUserUseCase } from '@useCases/user/update';
 import { User } from '@domain/entities/user/user';
 import { UserNotFound } from '@useCases/errors/UserNotFound';
+import { AuthModule } from '@useCases/authentication/authentication.module';
 
 describe('UsersController', () => {
     let user: User;
@@ -19,12 +20,13 @@ describe('UsersController', () => {
         listAllUsers: ListAllUsersUseCase,
         findUserById: FindUserByIdUseCase,
         updateUser: UpdateUserUseCase,
-        deleteUser: DeleteUserUseCase;
+        deleteUser: DeleteUserUseCase,
+        authModule: AuthModule;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             controllers: [UsersController],
-            imports: [UserUseCaseModule],
+            imports: [UserUseCaseModule, AuthModule],
         }).compile();
 
         user = await makeUser();
