@@ -7,6 +7,7 @@ import {
     Post,
     Put,
     Query,
+    UseGuards,
 } from '@nestjs/common';
 import { CreateUserUseCase } from '@useCases/user/create';
 import { DeleteUserUseCase } from '@useCases/user/delete';
@@ -16,7 +17,9 @@ import { UpdateUserUseCase } from '@useCases/user/update';
 import { CreateUserDTO } from '../dtos/user/create.dto';
 import { UpdateUserDto } from '../dtos/user/update.dto';
 import { listAllUsersDTO } from '../dtos/user/listAll.dto';
+import { JwtAuthGuard } from '@useCases/authentication/guards/jwt.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
     constructor(
