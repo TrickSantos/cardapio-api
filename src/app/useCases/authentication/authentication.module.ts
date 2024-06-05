@@ -1,12 +1,12 @@
-import { DatabaseModule } from '@infra/database/database.module';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { LoginUseCase } from './login';
 import { ValidateUseCase } from './validate';
+import { UserUseCaseModule } from '@useCases/user/user.module';
 
 @Module({
     imports: [
-        DatabaseModule,
+        UserUseCaseModule,
         JwtModule.register({
             global: true,
             secret: process.env.SECRET_SEED,

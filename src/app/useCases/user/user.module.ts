@@ -5,6 +5,7 @@ import { DeleteUserUseCase } from './delete';
 import { FindUserByIdUseCase } from './findById';
 import { ListAllUsersUseCase } from './listAll';
 import { UpdateUserUseCase } from './update';
+import { FindUserByEmailUseCase } from './findByEmail';
 
 @Module({
     imports: [DatabaseModule],
@@ -12,6 +13,7 @@ import { UpdateUserUseCase } from './update';
         CreateUserUseCase,
         DeleteUserUseCase,
         FindUserByIdUseCase,
+        FindUserByEmailUseCase,
         ListAllUsersUseCase,
         UpdateUserUseCase,
     ],
@@ -21,6 +23,7 @@ import { UpdateUserUseCase } from './update';
         FindUserByIdUseCase,
         ListAllUsersUseCase,
         UpdateUserUseCase,
+        FindUserByEmailUseCase,
     ],
 })
 export class UserUseCaseModule {}
